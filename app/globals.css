@@ -9,12 +9,15 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 5rem;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 body {
   margin: 0;
   background: #080a0f;
-  overflow-x: hidden;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 ::selection {
@@ -83,4 +86,11 @@ body {
   html { scroll-behavior: auto; }
   .animate-float { animation: none; }
   *, *::before, *::after { transition-duration: 0.01ms !important; }
+}
+
+@supports not (overflow: clip) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
 }

@@ -4,22 +4,22 @@ const whatsapp = "https://wa.me/5522998183416?text=Olá%2C%20gostaria%20de%20sol
 
 export default function Hero() {
   return (
-    <section className="aurora grid-pattern relative overflow-hidden px-5 pb-20 pt-36 sm:px-6 lg:pb-28 lg:pt-44">
+    <section className="aurora grid-pattern relative overflow-hidden px-4 pb-20 pt-32 sm:px-6 sm:pt-36 lg:pb-28 lg:pt-44">
       <div className="pointer-events-none absolute left-1/2 top-20 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-primary/10 blur-[120px]" />
-      <div className="relative mx-auto grid max-w-[1180px] items-center gap-14 lg:grid-cols-[1.05fr_.95fr]">
-        <div>
-          <div className="mb-7 inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-300">
+      <div className="relative mx-auto grid min-w-0 max-w-[1180px] items-center gap-14 lg:grid-cols-[1.05fr_.95fr]">
+        <div className="min-w-0">
+          <div className="mb-7 inline-flex max-w-full items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-300 sm:gap-3 sm:text-[11px] sm:tracking-[0.18em]">
             <span className="flex size-5 items-center justify-center rounded-full bg-accent/15"><span className="size-1.5 rounded-full bg-accent shadow-[0_0_10px_#b6f36b]" /></span>
             Design, código e estratégia
           </div>
-          <h1 className="text-balance text-5xl font-semibold leading-[.98] tracking-[-0.065em] text-white sm:text-6xl lg:text-[76px]">
+          <h1 className="text-balance text-[42px] font-semibold leading-[.98] tracking-[-0.06em] text-white min-[360px]:text-5xl sm:text-6xl lg:text-[76px]">
             Sites digitais feitos para <span className="bg-gradient-to-r from-accent via-white to-primary bg-clip-text text-transparent">mover negócios.</span>
           </h1>
           <p className="mt-7 max-w-xl text-base leading-7 text-slate-400 sm:text-lg">
             Criamos experiências web únicas, rápidas e preparadas para transformar atenção em resultado.
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <a href={whatsapp} target="_blank" rel="noopener noreferrer" className="shine inline-flex items-center justify-center gap-3 rounded-2xl bg-accent px-7 py-4 text-sm font-bold text-background-dark transition-transform hover:-translate-y-1">
+            <a href={whatsapp} target="_blank" rel="noopener noreferrer" className="shine inline-flex items-center justify-center gap-3 rounded-2xl bg-accent px-5 py-4 text-center text-sm font-bold text-background-dark transition-transform hover:-translate-y-1 sm:px-7">
               Quero tirar meu projeto do papel <span aria-hidden="true">↗</span>
             </a>
             <a href="#portfolio" className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-7 py-4 text-sm font-semibold text-white transition hover:bg-white/[0.08]">
@@ -33,7 +33,7 @@ export default function Hero() {
           </div>
         </div>
 
-        <div className="animate-float relative mx-auto w-full max-w-[540px]">
+        <div className="animate-float relative mx-auto min-w-0 w-full max-w-[540px]">
           <div className="absolute -inset-8 rounded-full bg-primary/10 blur-3xl" />
           <div className="glass relative overflow-hidden rounded-[28px] p-2 shadow-[0_40px_100px_rgba(0,0,0,.5)]">
             <div className="overflow-hidden rounded-[22px] border border-white/5 bg-[#0b0e15]">
@@ -41,11 +41,11 @@ export default function Hero() {
                 <span className="size-2.5 rounded-full bg-[#ff6b6b]" /><span className="size-2.5 rounded-full bg-[#ffd166]" /><span className="size-2.5 rounded-full bg-accent" />
                 <div className="mx-auto flex h-6 w-1/2 items-center justify-center rounded-md bg-white/[0.04] text-[8px] text-slate-600">freiman.dev</div>
               </div>
-              <div className="relative min-h-[390px] overflow-hidden p-6 sm:p-8">
+              <div className="relative min-h-[360px] overflow-hidden p-5 min-[360px]:min-h-[390px] sm:p-8">
                 <div className="absolute right-[-70px] top-[-50px] size-64 rounded-full bg-primary/20 blur-3xl" />
                 <div className="relative">
                   <p className="text-[10px] font-semibold uppercase tracking-[.22em] text-accent">Digital studio — 2026</p>
-                  <p className="mt-5 max-w-[360px] text-4xl font-semibold leading-[.95] tracking-[-.06em] text-white sm:text-5xl">Ideias fortes merecem presença forte.</p>
+                  <p className="mt-5 max-w-[360px] text-3xl font-semibold leading-[.95] tracking-[-.06em] text-white min-[360px]:text-4xl sm:text-5xl">Ideias fortes merecem presença forte.</p>
                   <div className="mt-8 grid grid-cols-3 gap-2">
                     {[["01", "Estratégia"], ["02", "Design"], ["03", "Código"]].map(([number, label]) => (
                       <div key={number} className="rounded-xl border border-white/[0.07] bg-white/[0.035] p-3">

@@ -14,9 +14,9 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4">
-      <nav aria-label="Navegação principal" className="glass mx-auto max-w-[1180px] rounded-2xl">
-        <div className="flex h-16 items-center justify-between px-4 sm:px-6">
+    <header className="fixed inset-x-0 top-0 z-50 max-w-full px-3 pt-3 sm:px-4 sm:pt-4">
+      <nav aria-label="Navegação principal" className="glass mx-auto max-w-full rounded-2xl lg:max-w-[1180px]">
+        <div className="flex h-16 min-w-0 items-center justify-between gap-3 px-3 sm:px-6">
           <a href="#" aria-label="Freiman Dev — início" className="group flex items-center gap-3">
             <span className="flex size-9 items-center justify-center rounded-xl bg-accent text-background-dark transition-transform group-hover:rotate-6">
               <Icon name="terminal" className="size-5" />
@@ -36,7 +36,7 @@ export default function Navbar() {
             Iniciar projeto <span aria-hidden="true">↗</span>
           </a>
 
-          <button className="rounded-xl border border-white/10 p-2 text-white md:hidden" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="menu-mobile" aria-label={open ? "Fechar menu" : "Abrir menu"}>
+          <button className="shrink-0 rounded-xl border border-white/10 p-2.5 text-white md:hidden" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="menu-mobile" aria-label={open ? "Fechar menu" : "Abrir menu"}>
             <Icon name={open ? "close" : "menu"} className="size-6" />
           </button>
         </div>

@@ -10,7 +10,7 @@ const projects = [
 
 export default function Portfolio() {
   return (
-    <section className="border-y border-white/[0.07] bg-[#0b0d13] px-5 py-20 sm:px-6 lg:py-28" id="portfolio">
+    <section className="border-y border-white/[0.07] bg-[#0b0d13] px-4 py-20 sm:px-6 lg:py-28" id="portfolio">
       <div className="mx-auto max-w-[1180px]">
         <div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div><p className="text-xs font-semibold uppercase tracking-[.2em] text-accent">Projetos selecionados</p><h2 className="mt-4 text-4xl font-medium tracking-[-.05em] text-white sm:text-5xl">Trabalho que fala por si.</h2></div>
@@ -20,7 +20,7 @@ export default function Portfolio() {
         <div className="grid gap-4 md:grid-cols-2">
           {projects.map((project, index) => (
             <article key={project.title} className={`group ${project.featured ? "md:col-span-2" : ""}`}>
-              <div className={`relative overflow-hidden rounded-[28px] border border-white/[0.08] bg-surface-dark ${project.featured ? "aspect-[16/8] min-h-[300px]" : "aspect-[4/3]"}`}>
+              <div className={`relative overflow-hidden rounded-[24px] border border-white/[0.08] bg-surface-dark sm:rounded-[28px] ${project.featured ? "aspect-[4/3] min-h-[240px] sm:aspect-[16/8] sm:min-h-[300px]" : "aspect-[4/3]"}`}>
                 <Image src={project.src} alt={`Projeto ${project.title} desenvolvido pela Freiman Dev`} width={project.width} height={project.height} sizes={project.featured ? "(min-width: 768px) 1180px, 100vw" : "(min-width: 768px) 580px, 100vw"} className="size-full object-cover object-top transition duration-700 group-hover:scale-[1.035]" priority={index === 0} />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent opacity-60 transition group-hover:opacity-80" />
                 <span className="absolute right-5 top-5 flex size-11 translate-y-2 items-center justify-center rounded-full border border-white/15 bg-black/30 text-lg text-white opacity-0 backdrop-blur-md transition group-hover:translate-y-0 group-hover:opacity-100">↗</span>

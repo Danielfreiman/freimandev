@@ -6,7 +6,7 @@ const stats = [
 
 export default function About() {
   return (
-    <section className="border-y border-white/[0.07] px-5 py-20 sm:px-6 lg:py-28" id="sobre">
+    <section className="border-y border-white/[0.07] px-4 py-20 sm:px-6 lg:py-28" id="sobre">
       <div className="mx-auto grid max-w-[1180px] gap-12 lg:grid-cols-[.7fr_1.3fr] lg:gap-20">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[.2em] text-accent">Sobre a Freiman Dev</p>
@@ -17,7 +17,7 @@ export default function About() {
             Não entregamos apenas páginas. Construímos a <span className="text-slate-500">presença digital que sua marca precisa para crescer.</span>
           </h2>
           <p className="mt-7 max-w-2xl text-base leading-7 text-slate-400">Cada projeto nasce de objetivos reais de negócio e ganha forma em uma experiência clara, bonita e funcional — sem templates genéricos ou decisões sem propósito.</p>
-          <dl className="mt-10 grid grid-cols-3 gap-3 border-t border-white/10 pt-8">
+          <dl className="mt-10 grid grid-cols-3 gap-2 border-t border-white/10 pt-8 sm:gap-3">
             {stats.map(([value, label]) => <div key={value}><dt className="text-xl font-semibold text-white sm:text-3xl">{value}</dt><dd className="mt-1 text-[10px] uppercase tracking-wider text-slate-500 sm:text-xs">{label}</dd></div>)}
           </dl>
         </div>

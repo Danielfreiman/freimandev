@@ -4,7 +4,7 @@ const links = [["Sobre", "#sobre"], ["Serviços", "#servicos"], ["Projetos", "#p
 
 export default function Footer() {
   return (
-    <footer className="px-5 py-10 sm:px-6">
+    <footer className="px-4 py-10 sm:px-6">
       <div className="mx-auto max-w-[1180px]">
         <div className="flex flex-col justify-between gap-8 border-b border-white/[0.07] pb-10 md:flex-row md:items-center">
           <a href="#" aria-label="Freiman Dev — início" className="flex items-center gap-3"><span className="flex size-9 items-center justify-center rounded-xl bg-accent text-background-dark"><Icon name="terminal" className="size-5" /></span><span className="text-base font-bold tracking-[-.04em]">FREIMAN<span className="text-accent">/DEV</span></span></a>

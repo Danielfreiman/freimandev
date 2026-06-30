@@ -9,7 +9,7 @@ const features = [
 
 export default function Features() {
   return (
-    <section className="px-5 py-20 sm:px-6 lg:py-28" id="diferenciais">
+    <section className="px-4 py-20 sm:px-6 lg:py-28" id="diferenciais">
       <div className="mx-auto max-w-[1180px]">
         <div className="grid gap-12 lg:grid-cols-[.75fr_1.25fr]">
           <div className="lg:sticky lg:top-32 lg:self-start">
@@ -19,7 +19,7 @@ export default function Features() {
           </div>
           <div className="grid gap-3 md:grid-cols-2">
             {features.map((feature, index) => (
-              <article key={feature.title} className={`glass rounded-[26px] p-7 ${feature.className}`}>
+              <article key={feature.title} className={`glass rounded-[24px] p-6 sm:rounded-[26px] sm:p-7 ${feature.className}`}>
                 <div className="flex items-start justify-between"><span className="flex size-11 items-center justify-center rounded-2xl bg-primary/10 text-primary"><Icon name={feature.icon} className="size-5" /></span><span className="text-[9px] tracking-widest text-slate-600">0{index + 1}</span></div>
                 <h3 className="mt-10 text-xl font-medium tracking-[-.03em] text-white">{feature.title}</h3>
                 <p className="mt-3 max-w-md text-sm leading-6 text-slate-400">{feature.text}</p>
