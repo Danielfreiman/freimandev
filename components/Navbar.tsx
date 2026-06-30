@@ -1,72 +1,40 @@
-import React, { useState } from 'react';
+"use client";
 
-const Navbar: React.FC = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+import { useState } from "react";
+import Icon from "./Icon";
+
+export default function Navbar() {
+  const [open, setOpen] = useState(false);
+  const close = () => setOpen(false);
 
   return (
-    <nav className="fixed top-0 w-full z-50 border-b border-border-dark/30 bg-background-dark/80 backdrop-blur-md">
-      <div className="max-w-[1200px] mx-auto px-6 h-20 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-primary flex items-center justify-center rounded-lg shadow-[0_0_20px_rgba(59,130,246,0.3)]">
-            <span className="material-symbols-outlined text-background-dark font-bold">terminal</span>
-          </div>
-          <h2 className="text-xl font-bold tracking-tighter uppercase">
-            Freiman<span className="text-primary">.Dev</span>
-          </h2>
+    <nav aria-label="Navegação principal" className="fixed top-0 z-50 w-full border-b border-border-dark/30 bg-background-dark/80 backdrop-blur-md">
+      <div className="mx-auto flex h-20 max-w-[1200px] items-center justify-between px-6">
+        <a href="#" aria-label="Freiman Dev — início" className="flex items-center gap-3">
+          <span className="flex size-10 items-center justify-center rounded-lg bg-primary shadow-[0_0_20px_rgba(59,130,246,0.3)]">
+            <Icon name="terminal" className="size-6 text-background-dark" />
+          </span>
+          <span className="text-xl font-bold uppercase tracking-tighter">Freiman<span className="text-primary">.Dev</span></span>
+        </a>
+        <div className="hidden items-center gap-10 text-sm font-medium md:flex">
+          <a className="transition-colors hover:text-primary" href="#sobre">Sobre</a>
+          <a className="transition-colors hover:text-primary" href="#servicos">Serviços</a>
+          <a className="transition-colors hover:text-primary" href="#portfolio">Portfólio</a>
+          <a className="transition-colors hover:text-primary" href="#contato">Contato</a>
         </div>
-
-        {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-10 text-sm font-medium">
-          <a className="hover:text-primary transition-colors" href="#sobre">Sobre</a>
-          <a className="hover:text-primary transition-colors" href="#servicos">Serviços</a>
-          <a className="hover:text-primary transition-colors" href="#portfolio">Portfólio</a>
-          <a className="hover:text-primary transition-colors" href="#contato">Contato</a>
-        </div>
-
-        <div className="hidden md:block">
-            <a 
-              className="bg-accent text-background-dark px-6 py-2.5 rounded-lg font-bold text-sm tracking-wide hover:brightness-110 hover:shadow-[0_0_15px_rgba(132,204,22,0.4)] transition-all flex items-center gap-2" 
-              href="https://wa.me/5522998183416"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span className="material-symbols-outlined text-lg">chat</span>
-              Fale Conosco
-            </a>
-        </div>
-
-        {/* Mobile Toggle */}
-        <button 
-            className="md:hidden text-slate-100"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-            <span className="material-symbols-outlined text-3xl">
-                {isMobileMenuOpen ? 'close' : 'menu'}
-            </span>
+        <a className="hidden items-center gap-2 rounded-lg bg-accent px-6 py-2.5 text-sm font-bold text-background-dark transition-all hover:brightness-110 md:flex" href="https://wa.me/5522998183416?text=Olá%2C%20gostaria%20de%20solicitar%20um%20orçamento." target="_blank" rel="noopener noreferrer">
+          <Icon name="chat" className="size-5" /> Fale Conosco
+        </a>
+        <button className="rounded p-2 text-slate-100 md:hidden" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="menu-mobile" aria-label={open ? "Fechar menu" : "Abrir menu"}>
+          <Icon name={open ? "close" : "menu"} className="size-8" />
         </button>
       </div>
-
-      {/* Mobile Menu Dropdown */}
-      {isMobileMenuOpen && (
-          <div className="md:hidden bg-background-dark border-b border-border-dark/30 px-6 py-4 flex flex-col space-y-4">
-            <a className="hover:text-primary transition-colors" href="#sobre" onClick={() => setIsMobileMenuOpen(false)}>Sobre</a>
-            <a className="hover:text-primary transition-colors" href="#servicos" onClick={() => setIsMobileMenuOpen(false)}>Serviços</a>
-            <a className="hover:text-primary transition-colors" href="#portfolio" onClick={() => setIsMobileMenuOpen(false)}>Portfólio</a>
-            <a className="hover:text-primary transition-colors" href="#contato" onClick={() => setIsMobileMenuOpen(false)}>Contato</a>
-            <a 
-              className="bg-accent text-background-dark px-6 py-2.5 rounded-lg font-bold text-sm tracking-wide hover:brightness-110 text-center flex items-center justify-center gap-2" 
-              href="https://wa.me/5522998183416"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-                <span className="material-symbols-outlined text-lg">chat</span>
-                Fale Conosco
-            </a>
-          </div>
+      {open && (
+        <div id="menu-mobile" className="flex flex-col gap-4 border-b border-border-dark/30 bg-background-dark px-6 py-4 md:hidden">
+          <a href="#sobre" onClick={close}>Sobre</a><a href="#servicos" onClick={close}>Serviços</a><a href="#portfolio" onClick={close}>Portfólio</a><a href="#contato" onClick={close}>Contato</a>
+          <a className="flex items-center justify-center gap-2 rounded-lg bg-accent px-6 py-2.5 text-sm font-bold text-background-dark" href="https://wa.me/5522998183416?text=Olá%2C%20gostaria%20de%20solicitar%20um%20orçamento." target="_blank" rel="noopener noreferrer"><Icon name="chat" className="size-5" /> Fale Conosco</a>
+        </div>
       )}
     </nav>
   );
-};
-
-export default Navbar;
+}

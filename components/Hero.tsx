@@ -1,40 +1,15 @@
-import React from 'react';
+import Icon from "./Icon";
 
-const Hero: React.FC = () => {
+export default function Hero() {
   return (
-    <section className="relative min-h-screen flex flex-col justify-center items-center px-6 pt-20 grid-pattern">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background-dark/50 to-background-dark pointer-events-none"></div>
-      <div className="relative z-10 max-w-[960px] text-center space-y-8">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-          </span>
-          Soluções Web Sob Medida
-        </div>
-        <h1 className="text-5xl md:text-7xl font-black leading-[1.1] tracking-tight">
-          Freiman Dev: <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">
-            Presença Digital que Converte e Impressiona
-          </span>
-        </h1>
-        <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto font-light leading-relaxed">
-          Desenvolvemos soluções web personalizadas com foco em alta performance, design disruptivo e resultados estratégicos para o seu negócio.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <a 
-            className="w-full sm:w-auto px-10 py-4 bg-accent text-background-dark font-bold rounded-lg text-lg hover:scale-105 transition-transform shadow-xl shadow-accent/20 flex items-center justify-center gap-2" 
-            href="https://wa.me/5522998183416"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span className="material-symbols-outlined">chat</span>
-            Fale Conosco e Peça seu Orçamento
-          </a>
-        </div>
+    <section className="grid-pattern relative flex min-h-screen flex-col items-center justify-center px-6 pt-20">
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-background-dark/50 to-background-dark" />
+      <div className="relative z-10 max-w-[960px] space-y-8 text-center">
+        <p className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-primary"><span className="size-2 animate-pulse rounded-full bg-primary" />Soluções Web Sob Medida</p>
+        <h1 className="text-5xl font-black leading-[1.1] tracking-tight md:text-7xl">Freiman Dev:<br /><span className="bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">Presença Digital que Converte e Impressiona</span></h1>
+        <p className="mx-auto max-w-2xl text-lg font-light leading-relaxed text-slate-400 md:text-xl">Desenvolvemos soluções web personalizadas com foco em alta performance, design estratégico e resultados para o seu negócio.</p>
+        <a className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-accent px-10 py-4 text-lg font-bold text-background-dark shadow-xl shadow-accent/20 transition-transform hover:scale-105 sm:w-auto" href="https://wa.me/5522998183416?text=Olá%2C%20gostaria%20de%20solicitar%20um%20orçamento." target="_blank" rel="noopener noreferrer"><Icon name="chat" />Fale Conosco e Peça seu Orçamento</a>
       </div>
     </section>
   );
-};
-
-export default Hero;
+}

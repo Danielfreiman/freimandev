@@ -1,28 +1,12 @@
-import React from 'react';
+import Icon from "./Icon";
 
-const Footer: React.FC = () => {
+export default function Footer() {
   return (
-    <footer className="bg-background-dark border-t border-border-dark pt-16 pb-8 px-6">
-      <div className="max-w-[1200px] mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-8 mb-12">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-primary flex items-center justify-center rounded-lg">
-              <span className="material-symbols-outlined text-background-dark text-lg font-bold">terminal</span>
-            </div>
-            <h2 className="text-xl font-bold tracking-tighter uppercase">Freiman<span className="text-primary">.Dev</span></h2>
-          </div>
-
-        </div>
-        <div className="pt-8 border-t border-border-dark/30 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-slate-500 uppercase tracking-widest font-medium">
-          <p>© 2025 Freiman Dev. Excelência em Desenvolvimento Web.</p>
-          <div className="flex gap-8">
-            <a className="hover:text-white" href="#">Privacidade</a>
-            <a className="hover:text-white" href="#">Termos de Serviço</a>
-          </div>
-        </div>
+    <footer className="border-t border-border-dark bg-background-dark px-6 pb-8 pt-16">
+      <div className="mx-auto max-w-[1200px]">
+        <div className="mb-12 flex items-center justify-center"><a href="#" aria-label="Freiman Dev — início" className="flex items-center gap-3"><span className="flex size-8 items-center justify-center rounded-lg bg-primary"><Icon name="terminal" className="size-5 text-background-dark" /></span><span className="text-xl font-bold uppercase tracking-tighter">Freiman<span className="text-primary">.Dev</span></span></a></div>
+        <div className="flex flex-col items-center justify-between gap-4 border-t border-border-dark/30 pt-8 text-[10px] font-medium uppercase tracking-widest text-slate-500 md:flex-row"><p>© {new Date().getFullYear()} Freiman Dev. Excelência em Desenvolvimento Web.</p></div>
       </div>
     </footer>
   );
-};
-
-export default Footer;
+}

@@ -1,80 +1,27 @@
-import React from 'react';
+import Image from "next/image";
 
-const Portfolio: React.FC = () => {
-  const projects = [
-    {
-      title: "YAGE - Ethnobotanical Exploration",
-      category: "Conteúdo / Blog",
-      imageUrl: "/assets/projects/yage-home.png",
-      colSpan: "md:col-span-1"
-    },
-    {
-      title: "Maya Ethnobotanicals",
-      category: "E-commerce Global",
-      imageUrl: "/assets/projects/maya-home.png",
-      colSpan: "md:col-span-1"
-    },
-    {
-      title: "Medicina Sagrada",
-      category: "E-commerce de Nicho",
-      imageUrl: "/assets/projects/medicina-home.png",
-      colSpan: "md:col-span-1"
-    },
-    {
-      title: "Sacred Connection",
-      category: "E-commerce Internacional",
-      imageUrl: "/assets/projects/sacred-home.png",
-      colSpan: "md:col-span-1"
-    },
-    {
-      title: "Sítio Flor das Águas",
-      category: "Turismo & Hospedagem",
-      imageUrl: "/assets/projects/sitio-home.png",
-      colSpan: "md:col-span-2"
-    }
-  ];
+const projects = [
+  ["YAGE — Ethnobotanical Exploration", "Conteúdo / Blog", "/assets/projects/yage-home.png", 1892, 945, ""],
+  ["Maya Ethnobotanicals", "E-commerce Global", "/assets/projects/maya-home.png", 1898, 936, ""],
+  ["Medicina Sagrada", "E-commerce de Nicho", "/assets/projects/medicina-home.png", 1905, 937, ""],
+  ["Sacred Connection", "E-commerce Internacional", "/assets/projects/sacred-home.png", 1901, 941, ""],
+  ["Sítio Flor das Águas", "Turismo e Hospedagem", "/assets/projects/sitio-home.png", 1887, 938, "md:col-span-2"],
+] as const;
 
+export default function Portfolio() {
   return (
-    <section className="py-24 px-6 bg-surface-dark/10" id="portfolio">
-      <div className="max-w-[1200px] mx-auto">
-        <div className="mb-16">
-          <h2 className="text-4xl font-bold tracking-tight mb-4">Projetos que Geram Resultados</h2>
-          <p className="text-slate-400">Excelência técnica e visual aplicada em cada entrega.</p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {projects.map((project, index) => (
-            <ProjectCard
-              key={index}
-              imageUrl={project.imageUrl}
-              category={project.category}
-              title={project.title}
-              className={project.colSpan}
-            />
+    <section className="bg-surface-dark/10 px-6 py-24" id="portfolio">
+      <div className="mx-auto max-w-[1200px]">
+        <div className="mb-16"><h2 className="mb-4 text-4xl font-bold tracking-tight">Projetos que Geram Resultados</h2><p className="text-slate-400">Excelência técnica e visual aplicada em cada entrega.</p></div>
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+          {projects.map(([title, category, src, width, height, span]) => (
+            <article key={title} className={`group relative aspect-video overflow-hidden rounded-2xl border border-border-dark bg-surface-dark ${span}`}>
+              <Image src={src} alt={`Projeto ${title} desenvolvido pela Freiman Dev`} width={width} height={height} sizes={span ? "(min-width: 768px) 1200px, 100vw" : "(min-width: 768px) 584px, 100vw"} className="size-full object-cover object-top transition-transform duration-700 group-hover:scale-105" />
+              <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-background-dark via-background-dark/50 to-transparent p-8 opacity-100 transition-all md:opacity-0 md:group-hover:opacity-100"><span className="mb-2 text-xs font-bold uppercase tracking-widest text-accent">{category}</span><h3 className="text-2xl font-bold">{title}</h3></div>
+            </article>
           ))}
         </div>
       </div>
     </section>
   );
-};
-
-interface ProjectCardProps {
-  imageUrl: string;
-  category: string;
-  title: string;
-  className?: string;
 }
-
-const ProjectCard: React.FC<ProjectCardProps> = ({ imageUrl, category, title, className }) => (
-  <div className={`group relative overflow-hidden rounded-2xl bg-surface-dark border border-border-dark aspect-video ${className || ''}`}>
-    <div
-      className="absolute inset-0 bg-cover bg-top transition-transform duration-700 group-hover:scale-105"
-      style={{ backgroundImage: `url('${imageUrl}')` }}
-    ></div>
-    <div className="absolute inset-0 bg-gradient-to-t from-background-dark via-background-dark/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-8">
-      <span className="text-accent text-xs font-bold uppercase mb-2 tracking-widest">{category}</span>
-      <h4 className="text-2xl font-bold">{title}</h4>
-    </div>
-  </div>
-);
-
-export default Portfolio;

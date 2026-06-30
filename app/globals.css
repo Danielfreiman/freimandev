@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  margin: 0;
+  background: #1a1c1e;
+}
+
+::selection {
+  background: #84cc16;
+  color: #1a1c1e;
+}
+
+.grid-pattern {
+  background-image: radial-gradient(circle, #33373b 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+:focus-visible {
+  outline: 2px solid #84cc16;
+  outline-offset: 4px;
+}
