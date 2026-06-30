@@ -1,23 +1,34 @@
 import Image from "next/image";
 
 const projects = [
-  ["YAGE — Ethnobotanical Exploration", "Conteúdo / Blog", "/assets/projects/yage-home.png", 1892, 945, ""],
-  ["Maya Ethnobotanicals", "E-commerce Global", "/assets/projects/maya-home.png", 1898, 936, ""],
-  ["Medicina Sagrada", "E-commerce de Nicho", "/assets/projects/medicina-home.png", 1905, 937, ""],
-  ["Sacred Connection", "E-commerce Internacional", "/assets/projects/sacred-home.png", 1901, 941, ""],
-  ["Sítio Flor das Águas", "Turismo e Hospedagem", "/assets/projects/sitio-home.png", 1887, 938, "md:col-span-2"],
-] as const;
+  { title: "Sítio Flor das Águas", category: "Turismo & hospedagem", src: "/assets/projects/sitio-home.png", width: 1887, height: 938, featured: true },
+  { title: "Maya Ethnobotanicals", category: "E-commerce global", src: "/assets/projects/maya-home.png", width: 1898, height: 936 },
+  { title: "Medicina Sagrada", category: "E-commerce de nicho", src: "/assets/projects/medicina-home.png", width: 1905, height: 937 },
+  { title: "YAGE Exploration", category: "Conteúdo & editorial", src: "/assets/projects/yage-home.png", width: 1892, height: 945 },
+  { title: "Sacred Connection", category: "E-commerce internacional", src: "/assets/projects/sacred-home.png", width: 1901, height: 941 },
+];
 
 export default function Portfolio() {
   return (
-    <section className="bg-surface-dark/10 px-6 py-24" id="portfolio">
-      <div className="mx-auto max-w-[1200px]">
-        <div className="mb-16"><h2 className="mb-4 text-4xl font-bold tracking-tight">Projetos que Geram Resultados</h2><p className="text-slate-400">Excelência técnica e visual aplicada em cada entrega.</p></div>
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-          {projects.map(([title, category, src, width, height, span]) => (
-            <article key={title} className={`group relative aspect-video overflow-hidden rounded-2xl border border-border-dark bg-surface-dark ${span}`}>
-              <Image src={src} alt={`Projeto ${title} desenvolvido pela Freiman Dev`} width={width} height={height} sizes={span ? "(min-width: 768px) 1200px, 100vw" : "(min-width: 768px) 584px, 100vw"} className="size-full object-cover object-top transition-transform duration-700 group-hover:scale-105" />
-              <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-background-dark via-background-dark/50 to-transparent p-8 opacity-100 transition-all md:opacity-0 md:group-hover:opacity-100"><span className="mb-2 text-xs font-bold uppercase tracking-widest text-accent">{category}</span><h3 className="text-2xl font-bold">{title}</h3></div>
+    <section className="border-y border-white/[0.07] bg-[#0b0d13] px-5 py-20 sm:px-6 lg:py-28" id="portfolio">
+      <div className="mx-auto max-w-[1180px]">
+        <div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+          <div><p className="text-xs font-semibold uppercase tracking-[.2em] text-accent">Projetos selecionados</p><h2 className="mt-4 text-4xl font-medium tracking-[-.05em] text-white sm:text-5xl">Trabalho que fala por si.</h2></div>
+          <p className="max-w-sm text-sm leading-6 text-slate-500">Uma seleção de experiências digitais criadas para marcas com diferentes desafios.</p>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          {projects.map((project, index) => (
+            <article key={project.title} className={`group ${project.featured ? "md:col-span-2" : ""}`}>
+              <div className={`relative overflow-hidden rounded-[28px] border border-white/[0.08] bg-surface-dark ${project.featured ? "aspect-[16/8] min-h-[300px]" : "aspect-[4/3]"}`}>
+                <Image src={project.src} alt={`Projeto ${project.title} desenvolvido pela Freiman Dev`} width={project.width} height={project.height} sizes={project.featured ? "(min-width: 768px) 1180px, 100vw" : "(min-width: 768px) 580px, 100vw"} className="size-full object-cover object-top transition duration-700 group-hover:scale-[1.035]" priority={index === 0} />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent opacity-60 transition group-hover:opacity-80" />
+                <span className="absolute right-5 top-5 flex size-11 translate-y-2 items-center justify-center rounded-full border border-white/15 bg-black/30 text-lg text-white opacity-0 backdrop-blur-md transition group-hover:translate-y-0 group-hover:opacity-100">↗</span>
+              </div>
+              <div className="flex items-start justify-between gap-4 px-1 pb-4 pt-5">
+                <div><h3 className="text-xl font-medium tracking-[-.03em] text-white">{project.title}</h3><p className="mt-1 text-xs text-slate-500">{project.category}</p></div>
+                <span className="pt-1 text-[10px] tracking-[.18em] text-slate-600">0{index + 1}</span>
+              </div>
             </article>
           ))}
         </div>

@@ -8,11 +8,11 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: "#3b82f6",
-        accent: "#84cc16",
-        "background-dark": "#1a1c1e",
-        "surface-dark": "#24272a",
-        "border-dark": "#33373b",
+        primary: "#6d8dff",
+        accent: "#b6f36b",
+        "background-dark": "#080a0f",
+        "surface-dark": "#10131b",
+        "border-dark": "#222632",
       },
       fontFamily: {
         display: ["var(--font-space-grotesk)", "sans-serif"],

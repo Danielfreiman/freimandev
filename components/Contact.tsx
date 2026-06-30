@@ -4,15 +4,23 @@ const whatsapp = "https://wa.me/5522998183416?text=Olá%2C%20gostaria%20de%20sol
 
 export default function Contact() {
   return (
-    <section className="border-t border-border-dark/30 bg-surface-dark/20 px-6 py-24" id="contato">
-      <div className="mx-auto grid max-w-[1000px] grid-cols-1 items-center gap-16 lg:grid-cols-2">
-        <div className="space-y-6">
-          <h2 className="text-4xl font-black leading-tight tracking-tight md:text-5xl">Pronto para Levar Seu Negócio ao Próximo Nível?</h2>
-          <p className="text-lg text-slate-400">Entre em contato hoje mesmo. Estamos prontos para entender seu projeto e oferecer a melhor solução digital.</p>
-          <ul className="flex flex-col gap-4 text-sm text-slate-300"><li className="flex items-center gap-3"><Icon name="check_circle" className="size-5 text-primary" />Consultoria estratégica gratuita</li><li className="flex items-center gap-3"><Icon name="check_circle" className="size-5 text-primary" />Orçamento detalhado em 24h</li></ul>
-          <a href={whatsapp} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 font-bold text-accent hover:underline"><Icon name="chat" className="size-5" />Chamar no WhatsApp Agora</a>
+    <section className="px-5 pb-8 pt-12 sm:px-6 lg:pt-20" id="contato">
+      <div className="aurora relative mx-auto max-w-[1180px] overflow-hidden rounded-[32px] border border-white/10 bg-surface-dark px-6 py-14 sm:px-12 lg:px-16 lg:py-20">
+        <div className="pointer-events-none absolute -right-24 -top-24 size-80 rounded-full border border-accent/10" />
+        <div className="pointer-events-none absolute -right-10 -top-10 size-52 rounded-full border border-primary/20" />
+        <div className="relative grid items-end gap-12 lg:grid-cols-[1.2fr_.8fr]">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[.2em] text-accent">Vamos trabalhar juntos</p>
+            <h2 className="mt-5 max-w-3xl text-balance text-4xl font-medium leading-[1.03] tracking-[-.055em] text-white sm:text-6xl">Sua próxima grande ideia merece sair do papel.</h2>
+            <p className="mt-6 max-w-xl text-base leading-7 text-slate-400">Conte um pouco sobre o que você precisa. Em até 24 horas, retornamos com os próximos passos para transformar a ideia em resultado.</p>
+          </div>
+          <div className="lg:text-right">
+            <a href={whatsapp} target="_blank" rel="noopener noreferrer" className="shine inline-flex w-full items-center justify-center gap-3 rounded-2xl bg-accent px-7 py-5 text-sm font-bold text-background-dark transition-transform hover:-translate-y-1 sm:w-auto">
+              <Icon name="chat" className="size-5" /> Conversar no WhatsApp <span aria-hidden="true">↗</span>
+            </a>
+            <div className="mt-5 flex items-center justify-center gap-2 text-[10px] uppercase tracking-wider text-slate-500 lg:justify-end"><span className="size-1.5 rounded-full bg-accent" />Resposta em até 24 horas</div>
+          </div>
         </div>
-        <div className="rounded-2xl border border-border-dark bg-surface-dark p-8 text-center shadow-2xl"><h3 className="mb-2 text-2xl font-bold">Vamos conversar?</h3><p className="mb-6 text-slate-400">Fale diretamente conosco pelo WhatsApp.</p><a href={whatsapp} target="_blank" rel="noopener noreferrer" className="flex w-full items-center justify-center gap-2 rounded-lg bg-accent py-4 text-lg font-bold text-background-dark transition-all hover:brightness-110"><Icon name="chat" />Conversar no WhatsApp</a></div>
       </div>
     </section>
   );
