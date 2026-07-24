@@ -14,38 +14,36 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 max-w-full px-3 pt-3 sm:px-4 sm:pt-4">
-      <nav aria-label="Navegação principal" className="glass mx-auto max-w-full rounded-2xl lg:max-w-[1180px]">
-        <div className="flex h-16 min-w-0 items-center justify-between gap-3 px-3 sm:px-6">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#0a0b0e]/95">
+      <nav aria-label="Navegação principal" className="mx-auto max-w-[1180px] px-4 sm:px-6">
+        <div className="flex h-16 min-w-0 items-center justify-between gap-3">
           <a href="#" aria-label="Freiman Dev — início" className="group flex items-center gap-3">
-            <span className="flex size-9 items-center justify-center rounded-xl bg-accent text-background-dark transition-transform group-hover:rotate-6">
-              <Icon name="terminal" className="size-5" />
+            <span className="flex size-8 items-center justify-center rounded-md bg-accent text-background-dark">
+              <Icon name="terminal" className="size-4" />
             </span>
-            <span className="text-base font-bold tracking-[-0.04em]">FREIMAN<span className="text-accent">/DEV</span></span>
+            <span className="text-sm font-bold tracking-[-0.04em]">FREIMAN<span className="text-accent">/DEV</span></span>
           </a>
 
-          <div className="hidden items-center gap-1 rounded-xl border border-white/5 bg-black/20 p-1 md:flex">
+          <div className="hidden items-center gap-6 md:flex">
             {links.map(([label, href]) => (
-              <a key={href} href={href} className="rounded-lg px-4 py-2 text-xs font-medium text-slate-400 transition-colors hover:bg-white/5 hover:text-white">
-                {label}
-              </a>
+              <a key={href} href={href} className="text-xs font-medium text-slate-400 transition-colors hover:text-white">{label}</a>
             ))}
           </div>
 
-          <a className="hidden items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-xs font-bold text-background-dark transition hover:bg-accent md:flex" href="https://wa.me/5522998183416?text=Olá%2C%20gostaria%20de%20solicitar%20um%20orçamento." target="_blank" rel="noopener noreferrer">
+          <a className="hidden items-center gap-2 rounded-md border border-white/15 px-4 py-2.5 text-xs font-bold text-white transition-colors hover:border-accent hover:text-accent md:flex" href="https://wa.me/5522998183416?text=Olá%2C%20gostaria%20de%20solicitar%20um%20orçamento." target="_blank" rel="noopener noreferrer">
             Iniciar projeto <span aria-hidden="true">↗</span>
           </a>
 
-          <button className="shrink-0 rounded-xl border border-white/10 p-2.5 text-white md:hidden" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="menu-mobile" aria-label={open ? "Fechar menu" : "Abrir menu"}>
-            <Icon name={open ? "close" : "menu"} className="size-6" />
+          <button className="shrink-0 rounded-md border border-white/15 p-2 text-white md:hidden" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="menu-mobile" aria-label={open ? "Fechar menu" : "Abrir menu"}>
+            <Icon name={open ? "close" : "menu"} className="size-5" />
           </button>
         </div>
 
         {open && (
-          <div id="menu-mobile" className="border-t border-white/10 p-4 md:hidden">
-            <div className="flex flex-col gap-1">
-              {links.map(([label, href]) => <a key={href} href={href} onClick={() => setOpen(false)} className="rounded-xl px-4 py-3 text-sm text-slate-300 hover:bg-white/5">{label}</a>)}
-              <a href="#contato" onClick={() => setOpen(false)} className="mt-2 rounded-xl bg-accent px-4 py-3 text-center text-sm font-bold text-background-dark">Iniciar projeto</a>
+          <div id="menu-mobile" className="border-t border-white/10 py-3 md:hidden">
+            <div className="flex flex-col">
+              {links.map(([label, href]) => <a key={href} href={href} onClick={() => setOpen(false)} className="border-b border-white/[0.06] px-1 py-3 text-sm text-slate-300">{label}</a>)}
+              <a href="#contato" onClick={() => setOpen(false)} className="mt-3 rounded-md bg-accent px-4 py-3 text-center text-sm font-bold text-background-dark">Iniciar projeto</a>
             </div>
           </div>
         )}

@@ -76,7 +76,7 @@ const projects: Project[] = [
 export default function Portfolio() {
   return (
     <section
-      className="border-y border-white/[0.07] bg-[#0b0d13] px-4 py-20 sm:px-6 lg:py-28"
+      className="border-y border-white/10 bg-[#0d0f13] px-4 py-16 sm:px-6 sm:py-20 lg:py-24"
       id="portfolio"
     >
       <div className="mx-auto max-w-[1180px]">
@@ -118,9 +118,9 @@ export default function Portfolio() {
                   className="size-full object-cover object-center transition duration-700 group-hover:scale-[1.035]"
                   priority={index === 0}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-60 transition group-hover:opacity-80" />
+                <div className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/10" />
                 {project.href && (
-                  <span className="absolute right-5 top-5 flex size-11 translate-y-2 items-center justify-center rounded-full border border-white/15 bg-black/35 text-lg text-white opacity-0 backdrop-blur-md transition group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
+                  <span className="absolute right-5 top-5 flex size-11 translate-y-2 items-center justify-center rounded-full border border-white/15 bg-black/70 text-lg text-white opacity-0 transition group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
                     ↗
                   </span>
                 )}
@@ -179,9 +179,6 @@ export default function Portfolio() {
                       </ul>
                     )}
                   </div>
-                  <span className="shrink-0 pt-1 text-[10px] tracking-[.18em] text-slate-600">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
                 </div>
               </article>
             );

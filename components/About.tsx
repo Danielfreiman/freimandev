@@ -6,7 +6,7 @@ const stats = [
 
 export default function About() {
   return (
-    <section className="border-y border-white/[0.07] px-4 py-20 sm:px-6 lg:py-28" id="sobre">
+    <section className="border-y border-white/[0.07] px-4 py-16 sm:px-6 sm:py-20 lg:py-24" id="sobre">
       <div className="mx-auto grid max-w-[1180px] gap-12 lg:grid-cols-[.7fr_1.3fr] lg:gap-20">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[.2em] text-accent">Sobre a Freiman Dev</p>
