@@ -11,6 +11,7 @@ const paths: Record<string, string> = {
   search_check: "M10 3a7 7 0 1 0 4 13l5 5 2-2-5-5a7 7 0 0 0-6-11zm0 2a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm-1 7-3-2 1-2 2 2 3-3 2 1-5 4z",
   support_agent: "M12 3a8 8 0 0 0-8 8v6a3 3 0 0 0 3 3h3v-6H6v-3a6 6 0 0 1 12 0v3h-4v6h4a2 2 0 0 0 2-2v-7a8 8 0 0 0-8-8z",
   check_circle: "M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm-2 15-5-5 2-1 3 3 7-7 2 1-9 9z",
+  bolt: "M13 2 5 13h5l-1 9 8-11h-5l1-9z",
 };
 
 export default function Icon({ name, className = "size-6" }: { name: string; className?: string }) {

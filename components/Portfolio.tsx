@@ -75,23 +75,15 @@ const projects: Project[] = [
 
 export default function Portfolio() {
   return (
-    <section
-      className="border-y border-white/10 bg-[#0d0f13] px-4 py-16 sm:px-6 sm:py-20 lg:py-24"
-      id="portfolio"
-    >
+    <section className="border-y border-white/10 bg-[#0a0d13] px-4 py-16 sm:px-6 sm:py-20 lg:py-24" id="portfolio">
       <div className="mx-auto max-w-[1180px]">
         <div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[.2em] text-accent">
-              Projetos selecionados
-            </p>
-            <h2 className="mt-4 text-4xl font-medium tracking-[-.05em] text-white sm:text-5xl">
-              Trabalho que fala por si.
-            </h2>
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">Projetos selecionados</p>
+            <h2 className="mt-4 text-4xl font-medium tracking-[-0.05em] text-white sm:text-5xl">Trabalho que fala por si.</h2>
           </div>
           <p className="max-w-sm text-sm leading-6 text-slate-500">
-            Uma seleção de experiências digitais criadas para marcas com
-            diferentes desafios.
+            Uma seleção de experiências digitais criadas para marcas com diferentes desafios e contextos.
           </p>
         </div>
 
@@ -110,11 +102,7 @@ export default function Portfolio() {
                   alt={`Projeto ${project.title} desenvolvido pela Freiman Dev`}
                   width={project.width}
                   height={project.height}
-                  sizes={
-                    project.featured
-                      ? "(min-width: 768px) 1180px, 100vw"
-                      : "(min-width: 768px) 580px, 100vw"
-                  }
+                  sizes={project.featured ? "(min-width: 768px) 1180px, 100vw" : "(min-width: 768px) 580px, 100vw"}
                   className="size-full object-cover object-center transition duration-700 group-hover:scale-[1.035]"
                   priority={index === 0}
                 />
@@ -128,51 +116,24 @@ export default function Portfolio() {
             );
 
             return (
-              <article
-                key={project.title}
-                className={`group ${project.featured ? "md:col-span-2" : ""}`}
-              >
+              <article key={project.title} className={`group ${project.featured ? "md:col-span-2" : ""}`}>
                 {project.href ? (
-                  <a
-                    href={project.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={`Visitar ${project.title}`}
-                    className="block rounded-[28px]"
-                  >
+                  <a href={project.href} target="_blank" rel="noreferrer" aria-label={`Visitar ${project.title}`} className="block rounded-[28px]">
                     {image}
                   </a>
                 ) : (
                   image
                 )}
 
-                <div
-                  className={`flex items-start justify-between gap-6 px-1 pb-6 pt-5 ${
-                    project.featured ? "flex-col sm:flex-row" : ""
-                  }`}
-                >
+                <div className={`flex items-start justify-between gap-6 px-1 pb-6 pt-5 ${project.featured ? "flex-col sm:flex-row" : ""}`}>
                   <div className={project.featured ? "max-w-3xl" : ""}>
-                    <h3 className="text-xl font-medium tracking-[-.03em] text-white">
-                      {project.title}
-                    </h3>
-                    <p className="mt-1 text-xs text-slate-500">
-                      {project.category}
-                    </p>
-                    {project.description && (
-                      <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-400">
-                        {project.description}
-                      </p>
-                    )}
+                    <h3 className="text-xl font-medium tracking-[-0.03em] text-white">{project.title}</h3>
+                    <p className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500">{project.category}</p>
+                    {project.description && <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-400">{project.description}</p>}
                     {project.tags && (
-                      <ul
-                        aria-label="Entregas do projeto"
-                        className="mt-5 flex flex-wrap gap-2"
-                      >
+                      <ul aria-label="Entregas do projeto" className="mt-5 flex flex-wrap gap-2">
                         {project.tags.map((tag) => (
-                          <li
-                            key={tag}
-                            className="rounded-full border border-white/10 bg-white/[0.035] px-3 py-1.5 text-[10px] uppercase tracking-[.12em] text-slate-400"
-                          >
+                          <li key={tag} className="rounded-full border border-white/10 bg-white/[0.035] px-3 py-1.5 text-[10px] uppercase tracking-[0.12em] text-slate-400">
                             {tag}
                           </li>
                         ))}
