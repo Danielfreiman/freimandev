@@ -8,15 +8,15 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: "#6d8dff",
-        accent: "#b6f36b",
+        primary: "#8bd6ff",
+        accent: "#fa7f72",
         "background-dark": "#080a0f",
         "surface-dark": "#10131b",
         "border-dark": "#222632",
       },
       fontFamily: {
-        display: ["var(--font-space-grotesk)", "sans-serif"],
-        sans: ["var(--font-space-grotesk)", "sans-serif"],
+        display: ["var(--font-serif)", "Georgia", "serif"],
+        sans: ["var(--font-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
       },
     },
   },

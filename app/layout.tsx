@@ -1,11 +1,18 @@
 import type { Metadata, Viewport } from "next";
-import { Space_Grotesk } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
-const spaceGrotesk = Space_Grotesk({
+const inter = Inter({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-space-grotesk",
+  variable: "--font-sans",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["600", "700", "800"],
+  variable: "--font-serif",
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://freiman.dev";
@@ -80,8 +87,8 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="pt-BR" className={spaceGrotesk.variable}>
-      <body className="bg-background-dark font-display text-slate-100 antialiased">
+    <html lang="pt-BR" className={`${inter.variable} ${playfair.variable}`}>
+      <body className="bg-background-dark font-sans text-slate-100 antialiased">
         {children}
       </body>
     </html>

@@ -2,71 +2,53 @@ import Image from "next/image";
 
 type Project = {
   title: string;
-  category: string;
-  description?: string;
   src: string;
   width: number;
   height: number;
   href?: string;
-  featured?: boolean;
-  tags?: string[];
 };
 
 const projects: Project[] = [
   {
     title: "The Blog — Eudoxia",
-    category: "Design editorial & desenvolvimento WordPress",
-    description:
-      "Repaginação completa do blog, com nova experiência editorial, páginas de tags, templates para os posts e uma tipografia autoral criada especialmente para o projeto.",
     src: "/assets/projects/capa-eudoxia.png",
     width: 2538,
     height: 1268,
     href: "https://eudoxia.rocks/theblog/",
-    featured: true,
-    tags: ["Blog", "UX/UI", "Tags", "Tipografia autoral"],
   },
   {
     title: "ADVBNDES",
-    category: "Site institucional & associação",
-    description:
-      "Criação de uma presença digital clara e confiável para a Associação dos Advogados do BNDES, organizando conteúdo institucional, notícias, serviços e acesso dos associados.",
     src: "/assets/projects/capa-bndes.png",
     width: 2538,
     height: 1265,
     href: "https://advbndes.org.br/",
-    tags: ["Institucional", "UX/UI", "WordPress", "Responsivo"],
   },
   {
     title: "Sítio Flor das Águas",
-    category: "Turismo & hospedagem",
     src: "/assets/projects/sitio-home.png",
     width: 1887,
     height: 938,
   },
   {
     title: "Maya Ethnobotanicals",
-    category: "E-commerce global",
     src: "/assets/projects/maya-home.png",
     width: 1898,
     height: 936,
   },
   {
     title: "Medicina Sagrada",
-    category: "E-commerce de nicho",
     src: "/assets/projects/medicina-home.png",
     width: 1905,
     height: 937,
   },
   {
     title: "YAGE Exploration",
-    category: "Conteúdo & editorial",
     src: "/assets/projects/yage-home.png",
     width: 1892,
     height: 945,
   },
   {
     title: "Sacred Connection",
-    category: "E-commerce internacional",
     src: "/assets/projects/sacred-home.png",
     width: 1901,
     height: 941,
@@ -74,76 +56,73 @@ const projects: Project[] = [
 ];
 
 export default function Portfolio() {
+  const [heroProject, ...gallery] = projects;
+
   return (
-    <section className="border-y border-white/10 bg-[#0a0d13] px-4 py-16 sm:px-6 sm:py-20 lg:py-24" id="portfolio">
+    <section className="bg-[#04060b] px-4 py-16 sm:px-6 sm:py-24 lg:py-28" id="portfolio">
       <div className="mx-auto max-w-[1180px]">
-        <div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+        <div className="mb-14 grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">Projetos selecionados</p>
-            <h2 className="mt-4 text-4xl font-medium tracking-[-0.05em] text-white sm:text-5xl">Trabalho que fala por si.</h2>
+            <p className="text-xs uppercase tracking-[0.28em] text-accent/80">Projetos</p>
+            <h2 className="mt-4 text-4xl font-semibold tracking-[-0.05em] text-white sm:text-5xl">
+              Projetos que mostram o que fazemos, imagem por imagem.
+            </h2>
           </div>
-          <p className="max-w-sm text-sm leading-6 text-slate-500">
-            Uma seleção de experiências digitais criadas para marcas com diferentes desafios e contextos.
+          <p className="max-w-md text-sm leading-7 text-slate-500">
+            Cada trabalho aparece com imagem e título porque o foco é na presença do projeto e na clareza da narrativa.
           </p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          {projects.map((project, index) => {
-            const image = (
-              <div
-                className={`relative overflow-hidden rounded-[24px] border border-white/[0.08] bg-surface-dark sm:rounded-[28px] ${
-                  project.featured
-                    ? "aspect-[4/3] min-h-[260px] sm:aspect-[16/8] sm:min-h-[360px]"
-                    : "aspect-[4/3]"
-                }`}
-              >
-                <Image
-                  src={project.src}
-                  alt={`Projeto ${project.title} desenvolvido pela Freiman Dev`}
-                  width={project.width}
-                  height={project.height}
-                  sizes={project.featured ? "(min-width: 768px) 1180px, 100vw" : "(min-width: 768px) 580px, 100vw"}
-                  className="size-full object-cover object-center transition duration-700 group-hover:scale-[1.035]"
-                  priority={index === 0}
-                />
-                <div className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/10" />
-                {project.href && (
-                  <span className="absolute right-5 top-5 flex size-11 translate-y-2 items-center justify-center rounded-full border border-white/15 bg-black/70 text-lg text-white opacity-0 transition group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
-                    ↗
-                  </span>
-                )}
+        <div className="grid gap-6">
+          <article className="group relative overflow-hidden rounded-[32px] border border-white/10 bg-[#0f1625]/95 shadow-[0_30px_90px_rgba(0,0,0,0.2)]">
+            <div className="relative aspect-[16/9] overflow-hidden">
+              <Image
+                src={heroProject.src}
+                alt={`Projeto ${heroProject.title}`}
+                width={heroProject.width}
+                height={heroProject.height}
+                sizes="(min-width: 1024px) 1180px, 100vw"
+                className="h-full w-full object-cover object-center transition duration-700 group-hover:scale-[1.03]"
+                priority
+              />
+              {heroProject.href && (
+                <a
+                  href={heroProject.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="absolute left-6 top-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/75 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white transition hover:bg-accent hover:text-black"
+                >
+                  Ver projeto ↗
+                </a>
+              )}
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#04060b]/95 to-transparent p-6">
+                <h3 className="text-3xl font-semibold tracking-[-0.04em] text-white">{heroProject.title}</h3>
               </div>
-            );
+            </div>
+          </article>
 
-            return (
-              <article key={project.title} className={`group ${project.featured ? "md:col-span-2" : ""}`}>
-                {project.href ? (
-                  <a href={project.href} target="_blank" rel="noreferrer" aria-label={`Visitar ${project.title}`} className="block rounded-[28px]">
-                    {image}
-                  </a>
-                ) : (
-                  image
-                )}
-
-                <div className={`flex items-start justify-between gap-6 px-1 pb-6 pt-5 ${project.featured ? "flex-col sm:flex-row" : ""}`}>
-                  <div className={project.featured ? "max-w-3xl" : ""}>
-                    <h3 className="text-xl font-medium tracking-[-0.03em] text-white">{project.title}</h3>
-                    <p className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500">{project.category}</p>
-                    {project.description && <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-400">{project.description}</p>}
-                    {project.tags && (
-                      <ul aria-label="Entregas do projeto" className="mt-5 flex flex-wrap gap-2">
-                        {project.tags.map((tag) => (
-                          <li key={tag} className="rounded-full border border-white/10 bg-white/[0.035] px-3 py-1.5 text-[10px] uppercase tracking-[0.12em] text-slate-400">
-                            {tag}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
+          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+            {gallery.map((project) => (
+              <article
+                key={project.title}
+                className="group overflow-hidden rounded-[28px] border border-white/10 bg-[#0c111e]/95 transition hover:border-accent/40"
+              >
+                <div className="relative aspect-[4/3] overflow-hidden">
+                  <Image
+                    src={project.src}
+                    alt={`Projeto ${project.title}`}
+                    width={project.width}
+                    height={project.height}
+                    sizes="(min-width: 1280px) 420px, (min-width: 768px) 440px, 100vw"
+                    className="h-full w-full object-cover object-center transition duration-700 group-hover:scale-[1.04]"
+                  />
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent p-4">
+                    <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-white">{project.title}</h3>
                   </div>
                 </div>
               </article>
-            );
-          })}
+            ))}
+          </div>
         </div>
       </div>
     </section>

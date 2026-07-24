@@ -1,4 +1,4 @@
-@tailwind base;
+﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -11,7 +11,7 @@ html {
   scroll-padding-top: 5rem;
   max-width: 100%;
   overflow-x: hidden;
-  background: #07080b;
+  background: #090b13;
 }
 
 body {
@@ -20,24 +20,43 @@ body {
   max-width: 100%;
   overflow-x: hidden;
   background:
-    radial-gradient(circle at top left, rgba(182, 243, 107, 0.12), transparent 24%),
-    radial-gradient(circle at 85% 10%, rgba(109, 141, 255, 0.16), transparent 28%),
-    #07080b;
-  color: #f5f7fb;
+    radial-gradient(circle at 20% 10%, rgba(139, 214, 255, 0.16), transparent 22%),
+    radial-gradient(circle at 80% 8%, rgba(250, 127, 114, 0.14), transparent 24%),
+    linear-gradient(180deg, #05060d 0%, #080a12 100%);
+  color: #f7f9fc;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+h1,
+h2,
+h3,
+.h1,
+.h2,
+.h3 {
+  font-family: var(--font-serif), Georgia, Cambria, "Times New Roman", serif;
 }
 
 ::selection {
-  background: #b6f36b;
-  color: #161a10;
+  background: rgba(250, 127, 114, 0.35);
+  color: #0c1019;
 }
 
 :focus-visible {
-  outline: 2px solid #b6f36b;
+  outline: 2px solid rgba(250, 127, 114, 0.9);
   outline-offset: 4px;
 }
 
 .text-balance {
   text-wrap: balance;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img {
+  display: block;
+  max-width: 100%;
 }
 
 @media (prefers-reduced-motion: reduce) {
