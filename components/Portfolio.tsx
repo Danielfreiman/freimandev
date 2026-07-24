@@ -18,12 +18,23 @@ const projects: Project[] = [
     category: "Design editorial & desenvolvimento WordPress",
     description:
       "Repaginação completa do blog, com nova experiência editorial, páginas de tags, templates para os posts e uma tipografia autoral criada especialmente para o projeto.",
-    src: "/assets/projects/eudoxia-blog.jpeg",
-    width: 1280,
-    height: 853,
+    src: "/assets/projects/capa-eudoxia.png",
+    width: 2538,
+    height: 1268,
     href: "https://eudoxia.rocks/theblog/",
     featured: true,
     tags: ["Blog", "UX/UI", "Tags", "Tipografia autoral"],
+  },
+  {
+    title: "ADVBNDES",
+    category: "Site institucional & associação",
+    description:
+      "Criação de uma presença digital clara e confiável para a Associação dos Advogados do BNDES, organizando conteúdo institucional, notícias, serviços e acesso dos associados.",
+    src: "/assets/projects/capa-bndes.png",
+    width: 2538,
+    height: 1265,
+    href: "https://advbndes.org.br/",
+    tags: ["Institucional", "UX/UI", "WordPress", "Responsivo"],
   },
   {
     title: "Sítio Flor das Águas",
