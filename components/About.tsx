@@ -1,7 +1,7 @@
 const stats = [
-  ["100%", "sob medida"],
-  ["24h", "para o orçamento"],
-  ["SEO", "desde a estrutura"],
+  ["100%", "produtos digitais com propósito"],
+  ["24h", "para orçamento inicial"],
+  ["SEO", "desde a primeira linha"],
 ];
 
 export default function About() {
@@ -11,16 +11,16 @@ export default function About() {
         <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 sm:p-8">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">Sobre a Freiman Dev</p>
           <p className="mt-4 text-sm leading-7 text-slate-400">
-            Um estúdio digital que une estratégia, experiência e engenharia para dar aos projetos uma voz própria.
+            Um estúdio digital que combina estratégia, experiência e tecnologia para lançar produtos que funcionam no mundo real.
           </p>
         </div>
 
         <div className="rounded-[32px] border border-white/10 bg-[#0d1117]/80 p-8 sm:p-10">
           <h2 className="text-balance text-3xl font-medium leading-tight tracking-[-0.045em] text-white sm:text-5xl">
-            Não entregamos páginas. Entregamos uma presença que parece <span className="text-slate-400">feita para ser lembrada.</span>
+            Não entregamos sites bonitos. Entregamos ferramentas digitais que ajudam sua marca a crescer.
           </h2>
           <p className="mt-6 max-w-2xl text-base leading-7 text-slate-400">
-            Cada projeto nasce de um objetivo real e cresce com uma identidade visual clara, uma estrutura bem pensada e um código preparado para durar.
+            Cada projeto nasce de um objetivo claro: converter melhor, fortalecer a percepção da marca e garantir experiência consistente em todas as telas.
           </p>
 
           <div className="mt-8 grid gap-3 sm:grid-cols-3">

@@ -1,10 +1,10 @@
 import Icon from "./Icon";
 
 const features = [
-  { icon: "brush", title: "Design com identidade", text: "Nada de aparência genérica. Cada interface é construída a partir da essência e dos objetivos da sua marca." },
-  { icon: "search_check", title: "SEO desde o início", text: "Estrutura semântica, velocidade e conteúdo preparados para ajudar o Google a encontrar você." },
-  { icon: "terminal", title: "Tecnologia que dura", text: "Código limpo, seguro e fácil de evoluir conforme seu negócio cresce." },
-  { icon: "support_agent", title: "Parceria de verdade", text: "Comunicação clara durante o projeto e suporte especializado depois da entrega." },
+  { icon: "brush", title: "Direção criativa clara", text: "Não fazemos design por moda: criamos interfaces alinhadas ao objetivo do seu negócio." },
+  { icon: "search_check", title: "Resultado em busca", text: "Sites construídos para performance, com SEO técnico que nasce na estrutura e no conteúdo." },
+  { icon: "terminal", title: "Execução confiável", text: "Código sólido e escalável que permite evoluir o projeto com segurança e velocidade." },
+  { icon: "support_agent", title: "Entrega com apoio", text: "Acompanhamento próximo desde o briefing até a entrega e além, para que o projeto se mantenha forte." },
 ];
 
 export default function Features() {
@@ -13,9 +13,9 @@ export default function Features() {
       <div className="mx-auto max-w-[1180px]">
         <div className="grid gap-10 lg:grid-cols-[0.7fr_1.3fr] lg:gap-16">
           <div className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 sm:p-8">
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">Nosso jeito de fazer</p>
-            <h2 className="mt-4 text-balance text-4xl font-medium tracking-[-0.05em] text-white sm:text-5xl">Bonito na tela. Sólido por trás.</h2>
-            <p className="mt-5 max-w-sm text-sm leading-6 text-slate-400">Design e tecnologia trabalhando juntos, sem excessos e sem decisões decorativas vazias.</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">Como entregamos</p>
+            <h2 className="mt-4 text-balance text-4xl font-medium tracking-[-0.05em] text-white sm:text-5xl">Estrutura pensada para negócio.</h2>
+            <p className="mt-5 max-w-sm text-sm leading-6 text-slate-400">Design e tecnologia juntos para gerar presença, clareza e conversão sem exageros.</p>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">

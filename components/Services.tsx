@@ -1,10 +1,10 @@
 import Icon from "./Icon";
 
 const services = [
-  { icon: "ads_click", title: "Landing pages", description: "Páginas rápidas e persuasivas, desenhadas para campanhas, lançamentos e geração de oportunidades.", tags: ["Conversão", "Campanhas"] },
-  { icon: "shopping_bag", title: "E-commerce", description: "Lojas digitais intuitivas, seguras e prontas para acompanhar o crescimento das suas vendas.", tags: ["Vendas", "Escala"] },
-  { icon: "business", title: "Sites institucionais", description: "Presença profissional que traduz sua proposta de valor e fortalece sua autoridade no mercado.", tags: ["Marca", "Autoridade"] },
-  { icon: "newspaper", title: "Blogs & conteúdo", description: "Estruturas editoriais fáceis de gerenciar e preparadas para conquistar tráfego orgânico.", tags: ["Conteúdo", "SEO"] },
+  { icon: "ads_click", title: "Landing pages", description: "Páginas criadas para gerar leads e apoio a campanhas com linguagem direta e foco em conversão.", tags: ["Conversão", "Campanhas"] },
+  { icon: "shopping_bag", title: "E-commerce", description: "Lojas digitais pensadas para vender com segurança, velocidade e um fluxo de compra claro.", tags: ["Vendas", "Escala"] },
+  { icon: "business", title: "Sites institucionais", description: "Presenças digitais que fortalecem a reputação da marca e facilitam o contato com clientes e parceiros.", tags: ["Marca", "Autoridade"] },
+  { icon: "newspaper", title: "Blogs & conteúdo", description: "Soluções editoriais para posicionar sua empresa no Google e construir confiança com usuários.", tags: ["Conteúdo", "SEO"] },
 ];
 
 export default function Services() {
@@ -13,11 +13,11 @@ export default function Services() {
       <div className="mx-auto max-w-[1180px]">
         <div className="mb-10 grid gap-5 border-b border-white/10 pb-10 md:grid-cols-[1fr_0.7fr] md:items-end">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">O que fazemos</p>
-            <h2 className="mt-4 max-w-2xl text-4xl font-medium tracking-[-0.05em] text-white sm:text-5xl">Do primeiro clique à conversão.</h2>
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">O que entregamos</p>
+            <h2 className="mt-4 max-w-2xl text-4xl font-medium tracking-[-0.05em] text-white sm:text-5xl">Soluções digitais que funcionam para seu negócio.</h2>
           </div>
           <p className="max-w-md text-sm leading-6 text-slate-400 md:justify-self-end">
-            Soluções digitais completas para diferentes momentos e objetivos do seu negócio.
+            Sites, e-commerces e plataformas com foco em resultado: conversão, autoridade e experiência consistente.
           </p>
         </div>
 

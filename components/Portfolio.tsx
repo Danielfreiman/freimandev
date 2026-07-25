@@ -65,11 +65,11 @@ export default function Portfolio() {
           <div>
             <p className="text-xs uppercase tracking-[0.28em] text-accent/80">Projetos</p>
             <h2 className="mt-4 text-4xl font-semibold tracking-[-0.05em] text-white sm:text-5xl">
-              Projetos que mostram o que fazemos, imagem por imagem.
+              Projetos que mostram o que entregamos e como entregamos.
             </h2>
           </div>
           <p className="max-w-md text-sm leading-7 text-slate-500">
-            Cada trabalho aparece com imagem e título porque o foco é na presença do projeto e na clareza da narrativa.
+            Cada caso destaca imagem e título porque a mensagem principal é: resultados visuais alinhados a objetivos reais.
           </p>
         </div>
 
