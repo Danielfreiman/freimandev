@@ -63,18 +63,18 @@ export default function Portfolio() {
       <div className="mx-auto max-w-[1180px]">
         <div className="mb-14 grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
           <div>
-            <p className="text-xs uppercase tracking-[0.28em] text-accent/80">Projetos</p>
+            <p className="text-xs uppercase tracking-[0.28em] text-accent/80">Projetos já entregues</p>
             <h2 className="mt-4 text-4xl font-semibold tracking-[-0.05em] text-white sm:text-5xl">
-              Projetos que mostram o que entregamos e como entregamos.
+              Casos reais de sites, lojas e páginas que ganharam clareza e confiança.
             </h2>
           </div>
           <p className="max-w-md text-sm leading-7 text-slate-500">
-            Cada caso destaca imagem e título porque a mensagem principal é: resultados visuais alinhados a objetivos reais.
+            Veja como cada projeto foi pensado para atender a objetivos de marca, vendas e experiência do usuário.
           </p>
         </div>
 
         <div className="grid gap-6">
-          <article className="group relative overflow-hidden rounded-[32px] border border-white/10 bg-[#0f1625]/95 shadow-[0_30px_90px_rgba(0,0,0,0.2)]">
+          <article className="group relative overflow-hidden rounded-[32px] border border-white/10 bg-[#0f1625] shadow-[0_30px_90px_rgba(0,0,0,0.2)]">
             <div className="relative aspect-[16/9] overflow-hidden">
               <Image
                 src={heroProject.src}
@@ -95,7 +95,7 @@ export default function Portfolio() {
                   Ver projeto ↗
                 </a>
               )}
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#04060b]/95 to-transparent p-6">
+              <div className="absolute inset-x-0 bottom-0 bg-black/80 p-6">
                 <h3 className="text-3xl font-semibold tracking-[-0.04em] text-white">{heroProject.title}</h3>
               </div>
             </div>
@@ -105,7 +105,7 @@ export default function Portfolio() {
             {gallery.map((project) => (
               <article
                 key={project.title}
-                className="group overflow-hidden rounded-[28px] border border-white/10 bg-[#0c111e]/95 transition hover:border-accent/40"
+                className="group overflow-hidden rounded-[28px] border border-white/10 bg-[#0c111e] transition hover:border-accent/40"
               >
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <Image
@@ -116,7 +116,7 @@ export default function Portfolio() {
                     sizes="(min-width: 1280px) 420px, (min-width: 768px) 440px, 100vw"
                     className="h-full w-full object-cover object-center transition duration-700 group-hover:scale-[1.04]"
                   />
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent p-4">
+                  <div className="absolute inset-x-0 bottom-0 bg-black/80 p-4">
                     <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-white">{project.title}</h3>
                   </div>
                 </div>

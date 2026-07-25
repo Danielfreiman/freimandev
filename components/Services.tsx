@@ -23,8 +23,8 @@ export default function Services() {
 
         <div className="grid gap-4 md:grid-cols-2">
           {services.map((service) => (
-            <article key={service.title} className="group rounded-[28px] border border-white/10 bg-white/[0.03] p-6 transition-colors hover:border-accent/30 hover:bg-accent/[0.06]">
-              <span className="flex size-11 items-center justify-center rounded-2xl border border-white/15 bg-background-dark/70 text-accent transition-colors group-hover:border-accent/40">
+            <article key={service.title} className="group rounded-[28px] border border-white/10 bg-[#0c111a] p-6 transition-colors hover:border-accent/30 hover:bg-accent/[0.06]">
+              <span className="flex size-11 items-center justify-center rounded-2xl border border-white/15 bg-[#0d1117] text-accent transition-colors group-hover:border-accent/40">
                 <Icon name={service.icon} className="size-5" />
               </span>
               <div className="mt-5">
@@ -33,7 +33,7 @@ export default function Services() {
               </div>
               <div className="mt-6 flex flex-wrap gap-2">
                 {service.tags.map((tag) => (
-                  <span key={tag} className="rounded-full border border-white/10 bg-background-dark/60 px-3 py-1.5 text-[10px] uppercase tracking-[0.16em] text-slate-500">
+                  <span key={tag} className="rounded-full border border-white/10 bg-[#10131b] px-3 py-1.5 text-[10px] uppercase tracking-[0.16em] text-slate-500">
                     {tag}
                   </span>
                 ))}

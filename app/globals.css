@@ -19,10 +19,7 @@ body {
   min-height: 100%;
   max-width: 100%;
   overflow-x: hidden;
-  background:
-    radial-gradient(circle at 20% 10%, rgba(139, 214, 255, 0.16), transparent 22%),
-    radial-gradient(circle at 80% 8%, rgba(250, 127, 114, 0.14), transparent 24%),
-    linear-gradient(180deg, #05060d 0%, #080a12 100%);
+  background: #05060d;
   color: #f7f9fc;
   font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
