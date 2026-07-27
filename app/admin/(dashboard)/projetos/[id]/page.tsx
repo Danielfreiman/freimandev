@@ -124,7 +124,7 @@ export default async function ProjetoDetailPage({
         initialDueDate={project.due_date}
       />
 
-      <section className={styles.section}>
+      <section className={styles.section} id="orcamento">
         <h2 className={styles.subtitle}>Orçamento</h2>
         <BudgetEditor
           projectId={id}

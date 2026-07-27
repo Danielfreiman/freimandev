@@ -204,10 +204,11 @@
 }
 
 .docItem {
-  display: flex;
+  display: grid;
+  grid-template-columns: 6rem minmax(0, 1fr) auto auto;
   align-items: center;
   gap: 1rem;
-  padding: 0.6rem 0.75rem;
+  padding: 0.75rem;
   border: 1px solid var(--edge);
   font-size: var(--step-0);
   color: var(--steel-bright);
@@ -222,15 +223,50 @@
   min-width: 6rem;
 }
 
+.docIdentity {
+  min-width: 0;
+}
+
+.docProject {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 0.3rem;
+  color: var(--steel);
+  font-size: var(--step--1);
+}
+
+.docProject::after {
+  content: "↗";
+  color: var(--signal);
+}
+
+.docProject a {
+  overflow: hidden;
+  color: var(--steel-bright);
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.docProject a:hover {
+  color: var(--signal);
+}
+
 .docDate {
-  margin-left: auto;
   font-size: var(--step--1);
   color: var(--steel);
+  white-space: nowrap;
 }
 
 .docLink {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
   color: var(--paper);
   text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .docLink:hover {
@@ -240,4 +276,76 @@
 .docLink:disabled {
   color: var(--steel);
   cursor: default;
+}
+
+.docActions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-left: 0.25rem;
+}
+
+.docEdit,
+.docDelete {
+  border: 0;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: var(--step--1);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.docEdit {
+  color: var(--signal);
+}
+
+.docEdit:hover {
+  text-decoration: underline;
+}
+
+.docDelete {
+  padding: 0;
+  color: #ef4444;
+}
+
+.docDelete:hover {
+  text-decoration: underline;
+}
+
+.docDelete:disabled {
+  color: var(--steel);
+  cursor: wait;
+}
+
+.docActions [role="alert"] {
+  display: block;
+  margin-top: 0.25rem;
+  color: #ef4444;
+  font-size: var(--step--1);
+}
+
+@media (max-width: 48rem) {
+  .docItem {
+    grid-template-columns: 1fr auto;
+  }
+
+  .docType {
+    min-width: 0;
+  }
+
+  .docIdentity {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .docDate {
+    justify-self: end;
+  }
+
+  .docActions {
+    grid-column: 1 / -1;
+    padding-top: 0.35rem;
+    padding-left: 0;
+    border-top: 1px solid var(--edge);
+  }
 }

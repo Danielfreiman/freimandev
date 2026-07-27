@@ -93,6 +93,7 @@
   border-top: 1px solid var(--edge);
   padding-top: 2rem;
   margin-top: 2rem;
+  scroll-margin-top: 2rem;
 }
 
 .subtitle {

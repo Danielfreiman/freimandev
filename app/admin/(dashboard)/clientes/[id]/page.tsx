@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DeleteClient } from "./DeleteClient";
+import { DeleteDocumentButton } from "@/components/admin/DeleteDocumentButton";
 import { DocumentLink } from "@/components/admin/DocumentLink";
 import styles from "./page.module.css";
 
@@ -42,6 +43,50 @@ export default async function ClienteDetailPage({
       (projects ?? []).map((p) => p.id),
     )
     .order("created_at", { ascending: false });
+
+  const { data: deliverables } = await supabase
+    .from("deliverables")
+    .select("id, project_id, title, created_at")
+    .in(
+      "project_id",
+      (projects ?? []).map((p) => p.id),
+    )
+    .order("created_at", { ascending: false });
+
+  const projectById = new Map((projects ?? []).map((project) => [project.id, project]));
+
+  function slug(value: string) {
+    return value
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-zA-Z0-9]+/g, "-")
+      .replace(/^-|-$/g, "")
+      .toLowerCase();
+  }
+
+  function documentEditHref(document: {
+    type: string;
+    file_name: string | null;
+    project_id: string;
+  }) {
+    if (document.type === "contrato") {
+      return `/admin/projetos/${document.project_id}/contrato`;
+    }
+    if (document.type === "entregavel") {
+      const projectDeliverables = (deliverables ?? []).filter(
+        (item) => item.project_id === document.project_id,
+      );
+      const matchedDeliverable = projectDeliverables.find(
+        (item) =>
+          document.file_name === `entregavel-${slug(item.title)}.pdf`,
+      );
+      const deliverable = matchedDeliverable ?? projectDeliverables[0];
+      return deliverable
+        ? `/admin/projetos/${document.project_id}/entregavel/${deliverable.id}`
+        : `/admin/projetos/${document.project_id}/entregavel/novo`;
+    }
+    return `/admin/projetos/${document.project_id}#orcamento`;
+  }
 
   function currency(v: number) {
     return v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -155,12 +200,34 @@ export default async function ClienteDetailPage({
             {documents.map((doc) => (
               <li key={doc.id} className={styles.docItem}>
                 <span className={styles.docType}>{doc.type}</span>
-                <DocumentLink path={doc.file_url} className={styles.docLink}>
-                  {doc.file_name ?? "Abrir documento"}
-                </DocumentLink>
+                <div className={styles.docIdentity}>
+                  <DocumentLink path={doc.file_url} className={styles.docLink}>
+                    {doc.file_name ?? "Abrir documento"}
+                  </DocumentLink>
+                  <span className={styles.docProject}>
+                    Projeto
+                    <Link href={`/admin/projetos/${doc.project_id}`}>
+                      {projectById.get(doc.project_id)?.name ?? "Projeto removido"}
+                    </Link>
+                  </span>
+                </div>
                 <span className={styles.docDate}>
                   {new Date(doc.created_at).toLocaleDateString("pt-BR")}
                 </span>
+                <div className={styles.docActions}>
+                  <Link
+                    href={documentEditHref(doc)}
+                    className={styles.docEdit}
+                  >
+                    Editar
+                  </Link>
+                  <DeleteDocumentButton
+                    documentId={doc.id}
+                    fileName={doc.file_name ?? "documento"}
+                    filePath={doc.file_url}
+                    className={styles.docDelete}
+                  />
+                </div>
               </li>
             ))}
           </ul>
