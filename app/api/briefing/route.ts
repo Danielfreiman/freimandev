@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
+import { createBriefingPdf } from "@/lib/createBriefingPdf";
+import type { BudgetBrief } from "@/lib/createBudgetPdf";
+
 export const runtime = "nodejs";
 
 type BriefingPayload = {
@@ -32,6 +35,17 @@ function escapeHtml(value: string) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+}
+
+function safeFileName(value: string) {
+  return (
+    value
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-zA-Z0-9]+/g, "-")
+      .replace(/^-|-$/g, "")
+      .toLowerCase() || "projeto"
+  );
 }
 
 async function validateTurnstile(token: string, remoteIp: string | null) {
@@ -164,6 +178,21 @@ export async function POST(request: Request) {
     .join("");
 
   try {
+    const briefing: BudgetBrief = {
+      clientName,
+      email,
+      company,
+      projectType,
+      objective,
+      pages,
+      features,
+      contentStatus,
+      deadline,
+      budgetRange,
+      notes,
+    };
+    const briefingPdf = createBriefingPdf(briefing);
+
     await Promise.all([
       transporter.sendMail({
         from: `"Freiman Dev — Briefing" <${smtpUser}>`,
@@ -171,6 +200,13 @@ export async function POST(request: Request) {
         replyTo: email,
         subject: `Novo briefing — ${company || clientName} — ${projectType}`,
         text,
+        attachments: [
+          {
+            filename: `briefing-${safeFileName(company || clientName)}.pdf`,
+            content: Buffer.from(briefingPdf),
+            contentType: "application/pdf",
+          },
+        ],
         html: `
           <div style="margin:0;padding:28px;background:#f5f6f8;font-family:Arial,sans-serif">
             <div style="max-width:680px;margin:0 auto;background:#fff;border-top:6px solid #2563ff">
