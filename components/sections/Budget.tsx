@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Script from "next/script";
 import { createBudgetPdf, type BudgetBrief } from "@/lib/createBudgetPdf";
 import { TypeIn } from "@/components/ui/TypeIn";
@@ -32,6 +32,89 @@ const INITIAL_DATA: BudgetBrief = {
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
+type TurnstileApi = {
+  render: (
+    container: HTMLElement,
+    options: {
+      sitekey: string;
+      theme: "dark";
+      language: string;
+      appearance: "always";
+      callback: (token: string) => void;
+      "expired-callback": () => void;
+      "error-callback": () => void;
+    },
+  ) => string;
+  reset: (widgetId: string) => void;
+  remove: (widgetId: string) => void;
+};
+
+declare global {
+  interface Window {
+    turnstile?: TurnstileApi;
+  }
+}
+
+function TurnstileWidget({
+  siteKey,
+  onToken,
+  resetKey,
+}: {
+  siteKey: string;
+  onToken: (token: string) => void;
+  resetKey: number;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const widgetIdRef = useRef<string | null>(null);
+  const [scriptReady, setScriptReady] = useState(false);
+
+  useEffect(() => {
+    if (window.turnstile) setScriptReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (!scriptReady || !window.turnstile || !containerRef.current || widgetIdRef.current) {
+      return;
+    }
+    widgetIdRef.current = window.turnstile.render(containerRef.current, {
+      sitekey: siteKey,
+      theme: "dark",
+      language: "pt-BR",
+      appearance: "always",
+      callback: onToken,
+      "expired-callback": () => onToken(""),
+      "error-callback": () => onToken(""),
+    });
+
+    return () => {
+      if (widgetIdRef.current && window.turnstile) {
+        window.turnstile.remove(widgetIdRef.current);
+        widgetIdRef.current = null;
+      }
+    };
+  }, [scriptReady, siteKey, onToken]);
+
+  useEffect(() => {
+    if (resetKey > 0 && widgetIdRef.current && window.turnstile) {
+      window.turnstile.reset(widgetIdRef.current);
+      onToken("");
+    }
+  }, [resetKey, onToken]);
+
+  return (
+    <div className={styles.turnstile}>
+      <Script
+        id="cloudflare-turnstile"
+        src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+        strategy="afterInteractive"
+        onLoad={() => setScriptReady(true)}
+        onReady={() => setScriptReady(true)}
+      />
+      <div ref={containerRef} />
+    </div>
+  );
+}
+
 export function Budget() {
   const [step, setStep] = useState(0);
   const [data, setData] = useState<BudgetBrief>(INITIAL_DATA);
@@ -39,6 +122,10 @@ export function Budget() {
   const [generated, setGenerated] = useState(false);
   const [sending, setSending] = useState(false);
   const [website, setWebsite] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [turnstileResetKey, setTurnstileResetKey] = useState(0);
+  const [otherFeatureEnabled, setOtherFeatureEnabled] = useState(false);
+  const [otherFeature, setOtherFeature] = useState("");
   const progress = ((step + 1) / STEP_TITLES.length) * 100;
   const summary = useMemo(
     () => [
@@ -76,7 +163,11 @@ export function Budget() {
               data.objective.trim(),
           )
         : step === 1
-          ? Boolean(data.pages && data.contentStatus)
+          ? Boolean(
+              data.pages &&
+                data.contentStatus &&
+                (!otherFeatureEnabled || otherFeature.trim()),
+            )
           : Boolean(data.deadline && data.budgetRange);
     if (!valid) setError("Preencha os campos obrigatórios para continuar.");
     return valid;
@@ -88,21 +179,21 @@ export function Budget() {
   }
 
   function resetTurnstile() {
-    (
-      window as Window & {
-        turnstile?: { reset: () => void };
-      }
-    ).turnstile?.reset();
+    setTurnstileToken("");
+    setTurnstileResetKey((current) => current + 1);
   }
 
   async function submitBriefing() {
     if (!validateStep()) return;
-    const turnstileToken = TURNSTILE_SITE_KEY
-      ? document.querySelector<HTMLInputElement>(
-          'input[name="cf-turnstile-response"]',
-        )?.value || ""
-      : "";
-
+    const submissionData: BudgetBrief = {
+      ...data,
+      features: [
+        ...data.features,
+        ...(otherFeatureEnabled && otherFeature.trim()
+          ? [`Outros: ${otherFeature.trim()}`]
+          : []),
+      ],
+    };
     if (TURNSTILE_SITE_KEY && !turnstileToken) {
       setError("Confirme que você não é um robô para enviar.");
       return;
@@ -114,7 +205,7 @@ export function Budget() {
       const response = await fetch("/api/briefing", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, turnstileToken, website }),
+        body: JSON.stringify({ ...submissionData, turnstileToken, website }),
       });
       const result = (await response.json()) as { error?: string };
       if (!response.ok) {
@@ -122,7 +213,7 @@ export function Budget() {
         resetTurnstile();
         return;
       }
-      createBudgetPdf(data);
+      createBudgetPdf(submissionData);
       setGenerated(true);
     } catch {
       setError("Não foi possível enviar o briefing. Verifique sua conexão.");
@@ -134,12 +225,6 @@ export function Budget() {
 
   return (
     <section id="orcamento" className={styles.section}>
-      {TURNSTILE_SITE_KEY ? (
-        <Script
-          src="https://challenges.cloudflare.com/turnstile/v0/api.js"
-          strategy="afterInteractive"
-        />
-      ) : null}
       <div className={`shell ${styles.intro}`}>
         <p className="eyebrow">
           <TypeIn text="Briefing rápido" />
@@ -270,7 +355,35 @@ export function Budget() {
                       <span>{feature}</span>
                     </label>
                   ))}
+                  <label className={styles.option}>
+                    <input
+                      type="checkbox"
+                      checked={otherFeatureEnabled}
+                      onChange={(event) => {
+                        setOtherFeatureEnabled(event.target.checked);
+                        if (!event.target.checked) setOtherFeature("");
+                        setError("");
+                        setGenerated(false);
+                      }}
+                    />
+                    <span>Outros</span>
+                  </label>
                 </div>
+                {otherFeatureEnabled ? (
+                  <label className={styles.otherFeature}>
+                    <span>Descreva a funcionalidade *</span>
+                    <input
+                      value={otherFeature}
+                      onChange={(event) => {
+                        setOtherFeature(event.target.value);
+                        setError("");
+                        setGenerated(false);
+                      }}
+                      placeholder="Ex.: agendamento, área de membros ou integração específica"
+                      autoFocus
+                    />
+                  </label>
+                ) : null}
               </div>
               <label className={styles.field}>
                 <span>Como estão os textos e a identidade visual? *</span>
@@ -334,11 +447,10 @@ export function Budget() {
                 </p>
               </div>
               {TURNSTILE_SITE_KEY ? (
-                <div
-                  className="cf-turnstile"
-                  data-sitekey={TURNSTILE_SITE_KEY}
-                  data-theme="dark"
-                  data-language="pt-BR"
+                <TurnstileWidget
+                  siteKey={TURNSTILE_SITE_KEY}
+                  onToken={setTurnstileToken}
+                  resetKey={turnstileResetKey}
                 />
               ) : null}
             </fieldset>
