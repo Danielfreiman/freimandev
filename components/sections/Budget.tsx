@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Script from "next/script";
 import { createBudgetPdf, type BudgetBrief } from "@/lib/createBudgetPdf";
 import { TypeIn } from "@/components/ui/TypeIn";
 import styles from "./Budget.module.css";
@@ -17,6 +18,7 @@ const FEATURES = ["Formulários", "WhatsApp", "Pagamentos", "Área restrita", "B
 const STEP_TITLES = ["O projeto", "O escopo", "Prazo e investimento"];
 const INITIAL_DATA: BudgetBrief = {
   clientName: "",
+  email: "",
   company: "",
   projectType: "",
   objective: "",
@@ -28,11 +30,15 @@ const INITIAL_DATA: BudgetBrief = {
   notes: "",
 };
 
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+
 export function Budget() {
   const [step, setStep] = useState(0);
   const [data, setData] = useState<BudgetBrief>(INITIAL_DATA);
   const [error, setError] = useState("");
   const [generated, setGenerated] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [website, setWebsite] = useState("");
   const progress = ((step + 1) / STEP_TITLES.length) * 100;
   const summary = useMemo(
     () => [
@@ -62,7 +68,13 @@ export function Budget() {
   function validateStep(): boolean {
     const valid =
       step === 0
-        ? Boolean(data.clientName.trim() && data.projectType && data.objective.trim())
+        ? Boolean(
+            data.clientName.trim() &&
+              data.email.trim() &&
+              data.email.includes("@") &&
+              data.projectType &&
+              data.objective.trim(),
+          )
         : step === 1
           ? Boolean(data.pages && data.contentStatus)
           : Boolean(data.deadline && data.budgetRange);
@@ -75,27 +87,85 @@ export function Budget() {
     setStep((current) => Math.min(current + 1, STEP_TITLES.length - 1));
   }
 
-  function generatePdf() {
+  function resetTurnstile() {
+    (
+      window as Window & {
+        turnstile?: { reset: () => void };
+      }
+    ).turnstile?.reset();
+  }
+
+  async function submitBriefing() {
     if (!validateStep()) return;
-    createBudgetPdf(data);
-    setGenerated(true);
+    const turnstileToken = TURNSTILE_SITE_KEY
+      ? document.querySelector<HTMLInputElement>(
+          'input[name="cf-turnstile-response"]',
+        )?.value || ""
+      : "";
+
+    if (TURNSTILE_SITE_KEY && !turnstileToken) {
+      setError("Confirme que você não é um robô para enviar.");
+      return;
+    }
+
+    setSending(true);
+    setError("");
+    try {
+      const response = await fetch("/api/briefing", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...data, turnstileToken, website }),
+      });
+      const result = (await response.json()) as { error?: string };
+      if (!response.ok) {
+        setError(result.error || "Não foi possível enviar o briefing.");
+        resetTurnstile();
+        return;
+      }
+      createBudgetPdf(data);
+      setGenerated(true);
+    } catch {
+      setError("Não foi possível enviar o briefing. Verifique sua conexão.");
+      resetTurnstile();
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
     <section id="orcamento" className={styles.section}>
+      {TURNSTILE_SITE_KEY ? (
+        <Script
+          src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+          strategy="afterInteractive"
+        />
+      ) : null}
       <div className={`shell ${styles.intro}`}>
         <p className="eyebrow">
           <TypeIn text="Briefing rápido" />
         </p>
         <h2 className={styles.title}>Um orçamento começa com as perguntas certas.</h2>
         <p className={styles.lead}>
-          Organize o essencial do projeto em poucos minutos. Ao final, baixe um
-          PDF pronto para compartilhar e usar como ponto de partida.
+          Organize o essencial do projeto em poucos minutos. Ao enviar, o
+          briefing chega diretamente à equipe e uma cópia em PDF é baixada.
         </p>
       </div>
 
       <div className={`shell ${styles.workspace}`}>
-        <form className={styles.form} onSubmit={(event) => event.preventDefault()}>
+        <form
+          className={styles.form}
+          aria-busy={sending}
+          onSubmit={(event) => event.preventDefault()}
+        >
+          <label className={styles.honeypot} aria-hidden="true">
+            Website
+            <input
+              tabIndex={-1}
+              autoComplete="off"
+              value={website}
+              onChange={(event) => setWebsite(event.target.value)}
+            />
+          </label>
           <div className={styles.progressHead}>
             <span>Etapa {step + 1} de {STEP_TITLES.length}</span>
             <span>{STEP_TITLES[step]}</span>
@@ -125,15 +195,26 @@ export function Budget() {
                   />
                 </label>
                 <label className={styles.field}>
-                  <span>Empresa ou marca</span>
+                  <span>Seu email *</span>
                   <input
-                    value={data.company}
-                    onChange={(event) => update("company", event.target.value)}
-                    placeholder="Nome do negócio"
-                    autoComplete="organization"
+                    type="email"
+                    required
+                    value={data.email}
+                    onChange={(event) => update("email", event.target.value)}
+                    placeholder="voce@empresa.com.br"
+                    autoComplete="email"
                   />
                 </label>
               </div>
+              <label className={styles.field}>
+                <span>Empresa ou marca</span>
+                <input
+                  value={data.company}
+                  onChange={(event) => update("company", event.target.value)}
+                  placeholder="Nome do negócio"
+                  autoComplete="organization"
+                />
+              </label>
               <div className={styles.field}>
                 <span>O que precisa ser desenvolvido? *</span>
                 <div className={styles.options}>
@@ -249,16 +330,26 @@ export function Budget() {
                 <span aria-hidden="true">PDF</span>
                 <p>
                   <strong>Seu briefing está pronto.</strong>
-                  O arquivo organiza todas as respostas e pode ser baixado imediatamente.
+                  Ao enviar, as respostas chegam à Freiman Dev e o PDF é baixado imediatamente.
                 </p>
               </div>
+              {TURNSTILE_SITE_KEY ? (
+                <div
+                  className="cf-turnstile"
+                  data-sitekey={TURNSTILE_SITE_KEY}
+                  data-theme="dark"
+                  data-language="pt-BR"
+                />
+              ) : null}
             </fieldset>
           ) : null}
 
           <div className={styles.formFooter}>
             <div aria-live="polite">
               {error ? <p className={styles.error}>{error}</p> : null}
-              {generated ? <p className={styles.success}>PDF gerado e baixado.</p> : null}
+              {generated ? (
+                <p className={styles.success}>Briefing enviado e PDF baixado.</p>
+              ) : null}
             </div>
             <div className={styles.actions}>
               {step > 0 ? (
@@ -278,8 +369,14 @@ export function Budget() {
                   Continuar <span aria-hidden="true">→</span>
                 </button>
               ) : (
-                <button type="button" className={styles.next} onClick={generatePdf}>
-                  Baixar briefing em PDF <span aria-hidden="true">↓</span>
+                <button
+                  type="button"
+                  className={styles.next}
+                  disabled={sending}
+                  onClick={submitBriefing}
+                >
+                  {sending ? "Enviando..." : "Enviar briefing e baixar PDF"}{" "}
+                  <span aria-hidden="true">→</span>
                 </button>
               )}
             </div>

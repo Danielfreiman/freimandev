@@ -1,9 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Roboto } from "next/font/google";
 import { BRAND, SITE_URL, WHATSAPP_DISPLAY } from "@/data/brand";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import { SceneBoot } from "@/components/scene/SceneBoot";
+import { RouteChrome } from "@/components/layout/RouteChrome";
 import "./globals.css";
 
 /** Bricolage is reserved for headings; Roboto handles every utility role. */
@@ -83,19 +81,9 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={`${bricolage.variable} ${roboto.variable}`}>
       <body>
-        <script
-          type="application/ld+json"
-          // Static, developer-authored object — no user input reaches this.
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-        <a className="skip-link" href="#conteudo">
-          Ir para o conteúdo
-        </a>
-        <SceneBoot />
-        <Header />
-        <main id="conteudo">{children}</main>
-        <Footer />
-        <div className="grain" aria-hidden="true" />
+        <RouteChrome structuredData={JSON.stringify(jsonLd)}>
+          {children}
+        </RouteChrome>
       </body>
     </html>
   );

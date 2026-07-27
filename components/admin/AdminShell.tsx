@@ -33,7 +33,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             <rect x="12" y="8" width="22" height="7" fill="var(--deep-black)" />
             <rect x="12" y="27" width="16" height="7" fill="var(--deep-black)" />
           </svg>
-          <span className={styles.brandName}>Freiman Dev</span>
+          <span className={styles.brandName}>Freiman Admin</span>
         </Link>
 
         <nav className={styles.nav}>

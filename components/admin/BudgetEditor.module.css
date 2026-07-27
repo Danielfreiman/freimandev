@@ -1,7 +1,68 @@
 .editor {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.5rem;
+}
+
+.groupLabel {
+  display: block;
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 600;
+}
+
+.groupHelp {
+  margin-top: 0.25rem;
+  color: var(--steel);
+  font-size: var(--step--1);
+}
+
+.presets {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.preset {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 4rem;
+  padding: 0.75rem;
+  border: 1px solid var(--edge);
+  color: var(--steel-bright);
+  cursor: pointer;
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out);
+}
+
+.preset:hover,
+.presetSelected {
+  border-color: var(--signal);
+  background: var(--signal-dim);
+}
+
+.preset input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--signal);
+}
+
+.preset span {
+  display: flex;
+  flex-direction: column;
+}
+
+.preset strong {
+  color: var(--paper);
+  font-size: var(--step--1);
+}
+
+.preset small {
+  color: var(--steel);
 }
 
 .items {
@@ -93,6 +154,42 @@
   border-top: 1px solid var(--edge);
 }
 
+.logoField {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px dashed var(--edge-strong);
+  cursor: pointer;
+}
+
+.logoField span {
+  display: flex;
+  flex-direction: column;
+}
+
+.logoField strong {
+  color: var(--paper);
+  font-size: var(--step--1);
+}
+
+.logoField small {
+  color: var(--steel);
+}
+
+.logoField input {
+  max-width: 14rem;
+  color: var(--steel);
+  font-size: var(--step--1);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
 .total {
   display: flex;
   align-items: center;
@@ -141,11 +238,21 @@
 }
 
 .secondary {
-  align-self: flex-start;
   padding: 0.55rem 1.25rem;
   border: 1px solid var(--edge-strong);
   color: var(--paper);
   font-size: var(--step--1);
+}
+
+@media (max-width: 640px) {
+  .presets {
+    grid-template-columns: 1fr;
+  }
+
+  .logoField {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 }
 
 .secondary:hover {

@@ -19,6 +19,12 @@
   gap: 0.35rem;
 }
 
+.rowFields {
+  display: grid;
+  grid-template-columns: 1.4fr 0.8fr;
+  gap: 1rem;
+}
+
 .label {
   color: var(--steel);
   font-size: var(--step--1);
@@ -79,6 +85,44 @@
   font-size: var(--step--1);
 }
 
+.assetGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 0.75rem;
+}
+
+.assetField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-height: 7rem;
+  padding: 0.9rem;
+  border: 1px dashed var(--edge-strong);
+  cursor: pointer;
+}
+
+.assetField:hover {
+  border-color: var(--signal);
+}
+
+.assetField span {
+  color: var(--paper);
+  font-size: var(--step--1);
+  font-weight: 600;
+}
+
+.assetField small {
+  min-height: 2rem;
+  color: var(--steel);
+}
+
+.assetField input {
+  margin-top: auto;
+  max-width: 100%;
+  color: var(--steel);
+  font-size: var(--step--1);
+}
+
 .actions {
   display: flex;
   flex-wrap: wrap;
@@ -117,6 +161,10 @@
 }
 
 @media (max-width: 560px) {
+  .rowFields {
+    grid-template-columns: 1fr;
+  }
+
   .clause {
     grid-template-columns: 1.5rem 1fr;
   }

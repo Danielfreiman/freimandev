@@ -1,5 +1,6 @@
 export type BudgetBrief = {
   clientName: string;
+  email: string;
   company: string;
   projectType: string;
   objective: string;
@@ -114,6 +115,7 @@ export function createBudgetPdf(data: BudgetBrief): void {
     { text: `Gerado em ${generatedAt}`, kind: "meta" },
     { text: "", kind: "space" },
     ...field("Contato", data.clientName),
+    ...field("Email", data.email),
     ...field("Empresa ou marca", data.company),
     ...field("Tipo de projeto", data.projectType),
     ...field("Objetivo principal", data.objective),

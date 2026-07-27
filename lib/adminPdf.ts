@@ -1,147 +1,223 @@
 "use client";
 
+import { jsPDF } from "jspdf";
 import type { SupabaseClient } from "@supabase/supabase-js";
+
+export type PdfImage = {
+  dataUrl: string;
+  label?: string;
+  caption?: string;
+};
 
 export type PdfSection = {
   heading?: string;
-  lines: string[];
+  lines?: string[];
+  images?: PdfImage[];
 };
 
-type PdfLine = {
-  text: string;
-  style: "title" | "subtitle" | "heading" | "body" | "muted";
+export type PdfOptions = {
+  clientLogo?: string | null;
+  documentLabel?: string;
 };
 
-const PAGE_WIDTH = 595;
-const PAGE_HEIGHT = 842;
+const BLUE = [37, 99, 255] as const;
+const BLACK = [18, 18, 20] as const;
+const GRAY = [96, 96, 104] as const;
+const LIGHT = [226, 228, 234] as const;
+const PAGE_WIDTH = 210;
+const PAGE_HEIGHT = 297;
+const MARGIN = 18;
+const CONTENT_WIDTH = PAGE_WIDTH - MARGIN * 2;
 
-function pdfText(value: string) {
-  return value
-    .replace(/[–—]/g, "-")
-    .replace(/[“”]/g, '"')
-    .replace(/[‘’]/g, "'")
-    .replace(/•/g, "-")
-    .replace(/…/g, "...")
-    .replace(/[^\x20-\xFF]/g, "?")
-    .replace(/\\/g, "\\\\")
-    .replace(/\(/g, "\\(")
-    .replace(/\)/g, "\\)");
-}
+function drawBrand(doc: jsPDF, options: PdfOptions, pageNumber: number) {
+  doc.setFillColor(...BLUE);
+  doc.rect(0, 0, PAGE_WIDTH, 6, "F");
 
-function wrap(value: string, limit = 84) {
-  const result: string[] = [];
-  for (const paragraph of (value || "—").split(/\n/)) {
-    const words = paragraph.trim().split(/\s+/);
-    let line = "";
-    for (const word of words) {
-      if (!line) line = word;
-      else if (`${line} ${word}`.length <= limit) line += ` ${word}`;
-      else {
-        result.push(line);
-        line = word;
-      }
-    }
-    result.push(line || " ");
-  }
-  return result;
-}
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(8);
+  doc.setTextColor(...BLUE);
+  doc.text("FREIMAN DEV", MARGIN, 15);
 
-function pageStream(lines: PdfLine[], page: number, pages: number) {
-  let y = 765;
-  const commands = [
-    "0.039 0.039 0.039 rg",
-    `0 0 ${PAGE_WIDTH} ${PAGE_HEIGHT} re f`,
-    "0.145 0.388 1 RG",
-    "44 794 m 551 794 l S",
-  ];
-
-  for (const line of lines) {
-    const font = line.style === "title" || line.style === "heading" ? "F2" : "F1";
-    const size =
-      line.style === "title" ? 22 : line.style === "subtitle" ? 10 : line.style === "heading" ? 11 : 9.5;
-    const color =
-      line.style === "muted" || line.style === "subtitle"
-        ? "0.62 0.62 0.65"
-        : line.style === "heading"
-          ? "0.145 0.388 1"
-          : "0.96 0.96 0.95";
-
-    commands.push(
-      `${color} rg`,
-      `BT /${font} ${size} Tf 44 ${y} Td (${pdfText(line.text)}) Tj ET`,
-    );
-    y -= line.style === "title" ? 34 : line.style === "heading" ? 21 : 14;
+  if (options.documentLabel) {
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(...GRAY);
+    doc.text(options.documentLabel.toUpperCase(), PAGE_WIDTH - MARGIN, 15, {
+      align: "right",
+    });
   }
 
-  commands.push(
-    "0.62 0.62 0.65 rg",
-    `BT /F1 8 Tf 44 28 Td (Freiman Dev  |  ${page}/${pages}) Tj ET`,
+  doc.setDrawColor(...LIGHT);
+  doc.line(MARGIN, PAGE_HEIGHT - 15, PAGE_WIDTH - MARGIN, PAGE_HEIGHT - 15);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(7.5);
+  doc.setTextColor(...GRAY);
+  doc.text("Documento gerado pelo painel Freiman Dev", MARGIN, PAGE_HEIGHT - 9);
+  doc.text(String(pageNumber).padStart(2, "0"), PAGE_WIDTH - MARGIN, PAGE_HEIGHT - 9, {
+    align: "right",
+  });
+}
+
+function imageDimensions(doc: jsPDF, dataUrl: string, maxWidth: number, maxHeight: number) {
+  const properties = doc.getImageProperties(dataUrl);
+  const ratio = Math.min(maxWidth / properties.width, maxHeight / properties.height);
+  return {
+    width: properties.width * ratio,
+    height: properties.height * ratio,
+    format: properties.fileType,
+  };
+}
+
+function drawContainedImage(
+  doc: jsPDF,
+  image: PdfImage,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+) {
+  doc.setDrawColor(...LIGHT);
+  doc.setFillColor(248, 249, 252);
+  doc.roundedRect(x, y, width, height, 1.5, 1.5, "FD");
+  const dimensions = imageDimensions(doc, image.dataUrl, width - 4, height - 4);
+  const imageX = x + (width - dimensions.width) / 2;
+  const imageY = y + (height - dimensions.height) / 2;
+  doc.addImage(
+    image.dataUrl,
+    dimensions.format,
+    imageX,
+    imageY,
+    dimensions.width,
+    dimensions.height,
+    undefined,
+    "FAST",
   );
-  return commands.join("\n");
 }
 
-export function createAdminPdf(title: string, subtitle: string, sections: PdfSection[]) {
-  const lines: PdfLine[] = [
-    { text: title.toUpperCase(), style: "title" },
-    { text: subtitle, style: "subtitle" },
-  ];
+export function createAdminPdf(
+  title: string,
+  subtitle: string,
+  sections: PdfSection[],
+  options: PdfOptions = {},
+) {
+  const doc = new jsPDF({ unit: "mm", format: "a4", compress: true });
+  let pageNumber = 1;
+  let y = 30;
 
-  for (const section of sections) {
-    lines.push({ text: " ", style: "body" });
-    if (section.heading) lines.push({ text: section.heading.toUpperCase(), style: "heading" });
-    for (const value of section.lines) {
-      lines.push(...wrap(value).map((text) => ({ text, style: "body" as const })));
+  const newPage = () => {
+    doc.addPage();
+    pageNumber += 1;
+    drawBrand(doc, options, pageNumber);
+    y = 27;
+  };
+
+  const ensureSpace = (needed: number) => {
+    if (y + needed > PAGE_HEIGHT - 22) newPage();
+  };
+
+  drawBrand(doc, options, pageNumber);
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(23);
+  doc.setTextColor(...BLACK);
+  const titleLines = doc.splitTextToSize(title.toUpperCase(), 125) as string[];
+  doc.text(titleLines, MARGIN, y);
+
+  if (options.clientLogo) {
+    try {
+      const logo = imageDimensions(doc, options.clientLogo, 38, 22);
+      doc.addImage(
+        options.clientLogo,
+        logo.format,
+        PAGE_WIDTH - MARGIN - logo.width,
+        25,
+        logo.width,
+        logo.height,
+        undefined,
+        "FAST",
+      );
+    } catch {
+      // Um arquivo de logo inválido não deve impedir a geração do documento.
     }
+  } else {
+    doc.setDrawColor(...LIGHT);
+    doc.setLineDashPattern([1.5, 1.5], 0);
+    doc.roundedRect(PAGE_WIDTH - MARGIN - 38, 25, 38, 20, 1.5, 1.5);
+    doc.setLineDashPattern([], 0);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(7);
+    doc.setTextColor(...GRAY);
+    doc.text("LOGO DO CLIENTE", PAGE_WIDTH - MARGIN - 19, 36, { align: "center" });
   }
 
-  const pages: PdfLine[][] = [];
-  let current: PdfLine[] = [];
-  let height = 0;
-  for (const line of lines) {
-    const lineHeight = line.style === "title" ? 34 : line.style === "heading" ? 21 : 14;
-    if (height + lineHeight > 700 && current.length) {
-      pages.push(current);
-      current = [];
-      height = 0;
+  y += titleLines.length * 9 + 3;
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10);
+  doc.setTextColor(...GRAY);
+  const subtitleLines = doc.splitTextToSize(subtitle, 125) as string[];
+  doc.text(subtitleLines, MARGIN, y);
+  y = Math.max(y + subtitleLines.length * 5 + 12, 57);
+
+  sections.forEach((section, sectionIndex) => {
+    const lines = section.lines ?? [];
+    const images = section.images ?? [];
+    const imageHeight = images.length ? (images.length === 1 ? 92 : 72) : 0;
+    ensureSpace(18 + Math.min(lines.length * 6, 35) + imageHeight);
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8);
+    doc.setTextColor(...BLUE);
+    doc.text(String(sectionIndex + 1).padStart(2, "0"), MARGIN, y);
+    doc.text((section.heading || "INFORMAÇÕES").toUpperCase(), MARGIN + 12, y);
+    y += 5;
+
+    doc.setDrawColor(...BLUE);
+    doc.setLineWidth(0.5);
+    doc.line(MARGIN + 12, y, PAGE_WIDTH - MARGIN, y);
+    y += 7;
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9.5);
+    doc.setTextColor(...BLACK);
+    for (const line of lines) {
+      const wrapped = doc.splitTextToSize(line || "—", CONTENT_WIDTH - 12) as string[];
+      ensureSpace(wrapped.length * 5 + 3);
+      doc.text(wrapped, MARGIN + 12, y);
+      y += wrapped.length * 5 + 3;
     }
-    current.push(line);
-    height += lineHeight;
-  }
-  if (current.length) pages.push(current);
 
-  const objects: string[] = [];
-  const pageIds = pages.map((_, index) => 5 + index * 2);
-  objects[1] = "<< /Type /Catalog /Pages 2 0 R >>";
-  objects[2] = `<< /Type /Pages /Kids [${pageIds.map((id) => `${id} 0 R`).join(" ")}] /Count ${pages.length} >>`;
-  objects[3] = "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>";
-  objects[4] = "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>";
+    if (images.length) {
+      ensureSpace(imageHeight + 15);
+      const gap = 6;
+      const boxWidth =
+        images.length === 1
+          ? CONTENT_WIDTH - 12
+          : (CONTENT_WIDTH - 12 - gap) / 2;
+      const boxHeight = images.length === 1 ? 88 : 68;
 
-  pages.forEach((pageLines, index) => {
-    const pageId = pageIds[index]!;
-    const contentId = pageId + 1;
-    const content = pageStream(pageLines, index + 1, pages.length);
-    objects[pageId] =
-      `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${PAGE_WIDTH} ${PAGE_HEIGHT}] ` +
-      `/Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents ${contentId} 0 R >>`;
-    objects[contentId] = `<< /Length ${content.length} >>\nstream\n${content}\nendstream`;
+      images.slice(0, 2).forEach((image, imageIndex) => {
+        const x = MARGIN + 12 + imageIndex * (boxWidth + gap);
+        if (image.label) {
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(8);
+          doc.setTextColor(...BLUE);
+          doc.text(image.label.toUpperCase(), x, y);
+        }
+        drawContainedImage(doc, image, x, y + 4, boxWidth, boxHeight);
+        if (image.caption) {
+          doc.setFont("helvetica", "normal");
+          doc.setFontSize(7.5);
+          doc.setTextColor(...GRAY);
+          const caption = doc.splitTextToSize(image.caption, boxWidth) as string[];
+          doc.text(caption, x, y + boxHeight + 8);
+        }
+      });
+      y += boxHeight + 14;
+    }
+
+    y += 9;
   });
 
-  let pdf = "%PDF-1.4\n%\xE2\xE3\xCF\xD3\n";
-  const offsets = [0];
-  for (let id = 1; id < objects.length; id += 1) {
-    offsets[id] = pdf.length;
-    pdf += `${id} 0 obj\n${objects[id]}\nendobj\n`;
-  }
-  const xref = pdf.length;
-  pdf += `xref\n0 ${objects.length}\n0000000000 65535 f \n`;
-  for (let id = 1; id < objects.length; id += 1) {
-    pdf += `${String(offsets[id]).padStart(10, "0")} 00000 n \n`;
-  }
-  pdf += `trailer\n<< /Size ${objects.length} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`;
-
-  const bytes = new Uint8Array(pdf.length);
-  for (let i = 0; i < pdf.length; i += 1) bytes[i] = pdf.charCodeAt(i) & 0xff;
-  return new Blob([bytes], { type: "application/pdf" });
+  return doc.output("blob");
 }
 
 export function safeFileName(value: string) {
@@ -153,6 +229,15 @@ export function safeFileName(value: string) {
       .replace(/^-|-$/g, "")
       .toLowerCase() || "documento"
   );
+}
+
+export function fileToDataUrl(file: File) {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
+  });
 }
 
 export async function archivePdf(

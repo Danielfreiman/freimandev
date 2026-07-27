@@ -50,6 +50,14 @@
   background: var(--graphite);
 }
 
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .progressHead {
   display: flex;
   justify-content: space-between;
@@ -254,6 +262,10 @@
   color: var(--void);
 }
 .next:hover { background: var(--off-white); }
+.next:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
 
 .preview {
   position: sticky;
