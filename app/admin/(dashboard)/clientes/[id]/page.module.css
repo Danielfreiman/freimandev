@@ -1,0 +1,243 @@
+.page {
+  max-width: 64rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.headerActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.back {
+  font-size: var(--step--1);
+  color: var(--steel);
+  text-decoration: none;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.back:hover {
+  color: var(--paper);
+}
+
+.title {
+  font-size: var(--step-3);
+  font-weight: 620;
+  letter-spacing: -0.035em;
+  color: var(--paper);
+}
+
+.company {
+  font-size: var(--step-0);
+  color: var(--steel);
+  margin-top: 0.25rem;
+}
+
+.editBtn {
+  padding: 0.45rem 1rem;
+  border: 1px solid var(--edge);
+  color: var(--paper);
+  font-size: var(--step--1);
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out);
+}
+
+.editBtn:hover {
+  border-color: var(--signal);
+  background: rgba(37, 99, 255, 0.08);
+}
+
+.deleteBtn {
+  padding: 0.45rem 1rem;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  background: transparent;
+  color: #ef4444;
+  font-family: var(--font-body);
+  font-size: var(--step--1);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.deleteBtn:hover {
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.info {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.infoItem {
+  font-size: var(--step-0);
+  color: var(--paper);
+}
+
+.infoLabel {
+  display: block;
+  font-size: var(--step--1);
+  font-weight: 500;
+  color: var(--steel);
+  margin-bottom: 0.15rem;
+}
+
+.notes {
+  font-size: var(--step-0);
+  color: var(--steel-bright);
+  padding: 1rem;
+  border: 1px solid var(--edge);
+  background: var(--brand-graphite);
+  margin-bottom: 2rem;
+  white-space: pre-wrap;
+}
+
+.section {
+  border-top: 1px solid var(--edge);
+  padding-top: 2rem;
+  margin-top: 2rem;
+}
+
+.sectionHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-size: var(--step-1);
+  font-weight: 600;
+  color: var(--paper);
+  letter-spacing: -0.02em;
+}
+
+.addBtn {
+  font-size: var(--step--1);
+  color: var(--signal);
+  text-decoration: none;
+}
+
+.addBtn:hover {
+  text-decoration: underline;
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  font-size: var(--step--1);
+  font-weight: 500;
+  color: var(--steel);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--edge);
+}
+
+.table td {
+  padding: 0.65rem 0.75rem;
+  font-size: var(--step-0);
+  color: var(--steel-bright);
+  border-bottom: 1px solid var(--edge);
+}
+
+.name {
+  font-weight: 500;
+  color: var(--paper);
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  font-size: var(--step--1);
+  font-weight: 500;
+  border: 1px solid var(--edge);
+}
+
+.badge_in_progress { color: var(--signal); border-color: rgba(37, 99, 255, 0.4); }
+.badge_delivered { color: #22c55e; border-color: rgba(34, 197, 94, 0.4); }
+.badge_cancelled { color: #ef4444; border-color: rgba(239, 68, 68, 0.4); }
+.badge_contracted { color: #eab308; border-color: rgba(234, 179, 8, 0.4); }
+
+.viewLink {
+  font-size: var(--step--1);
+  color: var(--signal);
+  text-decoration: none;
+}
+
+.viewLink:hover {
+  text-decoration: underline;
+}
+
+.empty {
+  padding: 2rem 0;
+  text-align: center;
+  color: var(--steel);
+  font-size: var(--step-0);
+}
+
+.docList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.docItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--edge);
+  font-size: var(--step-0);
+  color: var(--steel-bright);
+}
+
+.docType {
+  font-size: var(--step--1);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--signal);
+  min-width: 6rem;
+}
+
+.docDate {
+  margin-left: auto;
+  font-size: var(--step--1);
+  color: var(--steel);
+}
+
+.docLink {
+  color: var(--paper);
+  text-align: left;
+}
+
+.docLink:hover {
+  color: var(--signal);
+}
+
+.docLink:disabled {
+  color: var(--steel);
+  cursor: default;
+}

@@ -38,6 +38,25 @@ scroll, dentro de um frame de navegador até o estado `no ar`.
 | `npm run typecheck` | TypeScript sem emitir arquivos |
 | `npm run optimize:images` | Converte capas de projeto para webp (veja abaixo) |
 
+## Área administrativa
+
+A rota `/admin` não aparece na navegação pública e exige uma conta do
+Supabase Auth com email e senha.
+
+1. Em um projeto Supabase novo, execute `supabase/schema.sql` no SQL Editor.
+2. Se o schema anterior já tiver sido executado, rode somente
+   `supabase/admin_completion_migration.sql`.
+3. Crie o usuário administrador em Authentication > Users.
+4. Configure na Vercel:
+
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=https://SEU-PROJETO.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=sua-anon-key
+   ```
+
+O bucket `admin-documents` é privado. Propostas, contratos e entregáveis são
+abertos no painel por URLs assinadas de curta duração.
+
 > Não rode `npm run build` com o `npm run dev` ativo: os dois compartilham o
 > diretório `.next` e o cache corrompe.
 

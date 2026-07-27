@@ -1,0 +1,164 @@
+.editor {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 5rem 7rem 7rem 2rem;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+@media (max-width: 640px) {
+  .row {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem;
+  }
+
+  .desc {
+    grid-column: 1 / -1;
+  }
+}
+
+.desc,
+.qty,
+.price {
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--edge);
+  background: var(--deep-black);
+  color: var(--paper);
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  outline: none;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.desc:focus,
+.qty:focus,
+.price:focus {
+  border-color: var(--signal);
+}
+
+.subtotal {
+  font-size: var(--step--1);
+  color: var(--steel-bright);
+  text-align: right;
+}
+
+.remove {
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  background: transparent;
+  color: var(--steel);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove:hover {
+  color: #ef4444;
+}
+
+.add {
+  align-self: flex-start;
+  border: none;
+  background: transparent;
+  color: var(--signal);
+  font-family: var(--font-body);
+  font-size: var(--step--1);
+  cursor: pointer;
+  padding: 0;
+}
+
+.add:hover {
+  text-decoration: underline;
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--edge);
+}
+
+.total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.totalLabel {
+  font-size: var(--step-0);
+  font-weight: 500;
+  color: var(--steel);
+}
+
+.totalValue {
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  font-weight: 600;
+  color: var(--paper);
+  letter-spacing: -0.02em;
+}
+
+.note {
+  font-size: var(--step--1);
+  color: #eab308;
+}
+
+.save {
+  align-self: flex-start;
+  padding: 0.55rem 1.25rem;
+  border: 1px solid var(--signal);
+  background: var(--signal);
+  color: var(--deep-black);
+  font-family: var(--font-display);
+  font-size: var(--step-0);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.save:hover {
+  background: var(--signal-bright);
+}
+
+.save:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.secondary {
+  align-self: flex-start;
+  padding: 0.55rem 1.25rem;
+  border: 1px solid var(--edge-strong);
+  color: var(--paper);
+  font-size: var(--step--1);
+}
+
+.secondary:hover {
+  border-color: var(--signal);
+  color: var(--signal);
+}
+
+.secondary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.message {
+  color: var(--steel-bright);
+  font-size: var(--step--1);
+}
