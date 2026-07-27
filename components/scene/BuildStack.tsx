@@ -58,11 +58,12 @@ type BuildStackProps = {
 
 /** The neutral page shown before any capability is chosen. */
 const DEFAULT_PREVIEW: PreviewBlock[] = [
-  { x: 8, y: 12, w: 52, h: 8, tone: "solid" },
-  { x: 8, y: 26, w: 74, h: 4, tone: "fill" },
-  { x: 8, y: 33, w: 60, h: 4, tone: "fill" },
-  { x: 8, y: 46, w: 50, h: 34, tone: "line" },
-  { x: 62, y: 46, w: 30, h: 34, tone: "line" },
+  { x: 6, y: 6, w: 88, h: 9, tone: "line", label: "Menu" },
+  { x: 6, y: 22, w: 52, h: 12, tone: "solid", label: "Título" },
+  { x: 6, y: 39, w: 66, h: 5, tone: "fill" },
+  { x: 6, y: 47, w: 52, h: 5, tone: "fill" },
+  { x: 6, y: 60, w: 42, h: 33, tone: "line", label: "Conteúdo" },
+  { x: 52, y: 60, w: 42, h: 33, tone: "line", label: "Imagem" },
 ];
 
 export function BuildStack({ arcRef, emphasis, preview }: BuildStackProps) {
@@ -95,6 +96,7 @@ export function BuildStack({ arcRef, emphasis, preview }: BuildStackProps) {
   const live = stage === STAGES.length - 1;
   const statusLabel = STAGES[stage]?.label ?? "aguardando";
   const emphasised = new Set(emphasis);
+
   const blocks = preview ?? DEFAULT_PREVIEW;
 
   return (
@@ -155,6 +157,8 @@ export function BuildStack({ arcRef, emphasis, preview }: BuildStackProps) {
             </span>
           </div>
 
+          {/* Named elements rather than a screenshot: the frame shows what a
+              page of this kind is made of, in words a visitor recognises. */}
           <div className={styles.page}>
             {blocks.map((block, i) => (
               <span
@@ -170,7 +174,11 @@ export function BuildStack({ arcRef, emphasis, preview }: BuildStackProps) {
                   width: `${block.w}%`,
                   height: `${block.h}%`,
                 }}
-              />
+              >
+                {block.label ? (
+                  <span className={styles.blockLabel}>{block.label}</span>
+                ) : null}
+              </span>
             ))}
           </div>
         </div>

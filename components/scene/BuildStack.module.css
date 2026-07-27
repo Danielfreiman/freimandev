@@ -242,7 +242,10 @@
    service reads as the same page being re-laid-out rather than swapped. */
 .block {
   position: absolute;
-  display: block;
+  display: flex;
+  align-items: center;
+  padding-inline: 0.45rem;
+  overflow: hidden;
   transition:
     left var(--dur) var(--ease-out),
     top var(--dur) var(--ease-out),
@@ -252,19 +255,43 @@
     border-color var(--dur) var(--ease-out);
 }
 
+/* Names what the block is, so the frame reads as a page and not as abstract
+   geometry. */
+.blockLabel {
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.1em;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--steel-bright);
+}
+
 .line {
-  border: 1px solid var(--edge);
+  border: 1px solid var(--edge-strong);
   background: rgba(233, 237, 242, 0.02);
 }
 
 .fill {
   border: 1px solid transparent;
-  background: rgba(233, 237, 242, 0.09);
+  background: rgba(233, 237, 242, 0.1);
 }
 
 .solid {
   border: 1px solid transparent;
-  background: rgba(233, 237, 242, 0.26);
+  background: rgba(233, 237, 242, 0.24);
+}
+
+.solid .blockLabel {
+  color: var(--paper);
+}
+
+@media (max-width: 560px) {
+  .blockLabel {
+    font-size: 0.48rem;
+    letter-spacing: 0.06em;
+  }
 }
 
 /* ---- Layer legend ------------------------------------------------------ */

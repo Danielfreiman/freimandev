@@ -2,20 +2,18 @@
 
 import Image from "next/image";
 import { useCallback, useRef, useState } from "react";
-import { PROJECTS } from "@/data/projects";
+import { FEATURED_PROJECTS, PUBLISHED_PROJECTS, hostOf } from "@/data/projects";
 import {
   useReducedMotion,
   usePointerTilt,
 } from "@/components/scene/useSceneMotion";
 import styles from "./SelectedWork.module.css";
 
-/** Real hostname of the delivered site, shown in the window's address bar. */
-function hostOf(href: string): string {
-  return href.replace(/^https?:\/\//, "").replace(/\/$/, "");
-}
-
 export function SelectedWork() {
-  const [activeSlug, setActiveSlug] = useState(PROJECTS[0]?.slug ?? "");
+  const [activeSlug, setActiveSlug] = useState(
+    FEATURED_PROJECTS[0]?.slug ?? "",
+  );
+  const remaining = PUBLISHED_PROJECTS.length - FEATURED_PROJECTS.length;
   const layoutRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
 
@@ -37,9 +35,11 @@ export function SelectedWork() {
 
       <div ref={layoutRef} className={`shell ${styles.layout}`}>
         <ol className={styles.list}>
-          {PROJECTS.map((project) => {
+          {FEATURED_PROJECTS.map((project, i) => {
             const isActive = project.slug === activeSlug;
             const select = () => setActiveSlug(project.slug);
+            // Derived, so adding a project never means renumbering by hand.
+            const index = String(i + 1).padStart(2, "0");
 
             return (
               <li
@@ -54,7 +54,7 @@ export function SelectedWork() {
                   onMouseEnter={select}
                   onFocus={select}
                 >
-                  <span className={styles.index}>{project.index}</span>
+                  <span className={styles.index}>{index}</span>
                   <span className={styles.name}>{project.name}</span>
                   <span className={styles.category}>{project.category}</span>
                   <span className={styles.arrow} aria-hidden="true">
@@ -99,11 +99,33 @@ export function SelectedWork() {
                       />
                     </div>
                   </div>
+
+                  {/* Says what the site is, in the same vocabulary as the
+                      services section above. */}
+                  <figcaption className={styles.caption}>
+                    <p className={styles.summary}>{project.summary}</p>
+                    <ul className={styles.tags}>
+                      {project.services.map((service) => (
+                        <li key={service} className={styles.tag}>
+                          {service}
+                        </li>
+                      ))}
+                    </ul>
+                  </figcaption>
                 </figure>
               </li>
             );
           })}
         </ol>
+
+        {remaining > 0 ? (
+          <a className={styles.all} href="/projetos">
+            Ver todos os projetos
+            <span className={styles.allCount}>
+              +{remaining}
+            </span>
+          </a>
+        ) : null}
       </div>
     </section>
   );

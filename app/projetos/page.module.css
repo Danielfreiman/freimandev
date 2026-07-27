@@ -1,0 +1,253 @@
+.page {
+  position: relative;
+  z-index: 3;
+  background: var(--void);
+  padding-top: 8rem;
+  padding-bottom: var(--section-y);
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: clamp(3rem, 8vh, 5rem);
+}
+
+.title {
+  font-size: var(--step-4);
+  font-weight: 650;
+  line-height: 0.94;
+  letter-spacing: -0.045em;
+}
+
+.lead {
+  max-width: var(--measure);
+  color: var(--steel-bright);
+  font-size: var(--step-1);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+/* A catalogue reads as a grid; the homepage keeps the one-at-a-time treatment
+   so the two never feel like the same section twice. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(2rem, 5vw, 3.5rem) clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+}
+
+.window {
+  display: block;
+  border: 1px solid var(--edge-strong);
+  background: var(--graphite);
+  overflow: hidden;
+  transition:
+    border-color var(--dur) var(--ease-out),
+    transform var(--dur) var(--ease-out);
+}
+
+.card:hover .window,
+.card:focus-visible .window {
+  border-color: var(--steel);
+  transform: translateY(-4px);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.7rem;
+  border-bottom: 1px solid var(--edge);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.06em;
+  color: var(--steel);
+}
+
+.dots {
+  display: flex;
+  gap: 0.28rem;
+  flex: none;
+}
+
+.dots span {
+  width: 5px;
+  height: 5px;
+  border: 1px solid var(--edge-strong);
+  border-radius: 50%;
+}
+
+.url {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--steel-bright);
+}
+
+.live {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.12rem 0.4rem;
+  border: 1px solid currentColor;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--signal);
+  background: var(--signal-dim);
+}
+
+.dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.screen {
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+}
+
+.cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  filter: saturate(0.75) brightness(0.9);
+  transition:
+    filter var(--dur-slow) var(--ease-out),
+    transform 1.2s var(--ease-out);
+}
+
+.card:hover .cover,
+.card:focus-visible .cover {
+  filter: none;
+  transform: scale(1.02);
+}
+
+.meta {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 0.3rem 0.7rem;
+}
+
+.index {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.16em;
+  color: var(--steel);
+}
+
+.name {
+  font-size: var(--step-1);
+  font-weight: 560;
+  letter-spacing: -0.025em;
+  color: var(--paper);
+}
+
+.category {
+  grid-column: 2;
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--steel);
+}
+
+.arrow {
+  grid-row: 1;
+  grid-column: 3;
+  color: var(--steel);
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.card:hover .arrow,
+.card:focus-visible .arrow {
+  color: var(--paper);
+  transform: translate(2px, -2px);
+}
+
+.summary {
+  display: block;
+  margin-top: -0.35rem;
+  max-width: 48ch;
+  color: var(--steel-bright);
+  font-size: var(--step-0);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: auto;
+  padding-top: 0.35rem;
+}
+
+.tag {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.55rem;
+  border: 1px solid var(--edge-strong);
+  color: var(--steel);
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.card:hover .tag,
+.card:focus-visible .tag {
+  border-color: var(--steel);
+}
+
+.cta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-top: clamp(4rem, 10vh, 7rem);
+  padding-top: clamp(2.5rem, 6vh, 4rem);
+  border-top: 1px solid var(--edge);
+}
+
+.ctaTitle {
+  font-size: var(--step-2);
+  font-weight: 620;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+@media (max-width: 780px) {
+  .page {
+    padding-top: 6.5rem;
+  }
+
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cover {
+    filter: none;
+  }
+
+  .cta > a {
+    width: 100%;
+    justify-content: center;
+    min-height: 48px;
+  }
+}
