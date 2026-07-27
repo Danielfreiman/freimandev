@@ -3,12 +3,12 @@
 import { useEffect, useState } from "react";
 import { CAPABILITIES } from "@/data/capabilities";
 import { useScene } from "@/components/scene/BuildArc";
+import { TypeIn } from "@/components/ui/TypeIn";
 import styles from "./Capabilities.module.css";
 
 export function Capabilities() {
   const [activeId, setActiveId] = useState(CAPABILITIES[0]?.id ?? "");
   const { focus } = useScene();
-
   const active =
     CAPABILITIES.find((item) => item.id === activeId) ?? CAPABILITIES[0];
 
@@ -20,7 +20,9 @@ export function Capabilities() {
     <section id="servicos" className={styles.section}>
       <div className={`shell ${styles.inner}`}>
         <header className={styles.head}>
-          <p className="eyebrow">O que entra em execução</p>
+          <p className="eyebrow">
+            <TypeIn text="O que entra em execução" />
+          </p>
           <h2 className={styles.title}>O que precisa sair do papel?</h2>
         </header>
 
@@ -47,14 +49,11 @@ export function Capabilities() {
             })}
           </ul>
 
-          <p
-            id="capability-detail"
-            className={styles.detail}
-            aria-live="polite"
-          >
+          <p id="capability-detail" className={styles.detail} aria-live="polite">
             {active?.description}
           </p>
         </div>
+
       </div>
     </section>
   );

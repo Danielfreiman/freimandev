@@ -23,7 +23,7 @@
   z-index: -1;
   background: radial-gradient(
     58% 60% at 32% 50%,
-    rgba(5, 7, 10, 0.88),
+    rgba(10, 10, 10, 0.9),
     transparent 72%
   );
   pointer-events: none;
@@ -72,8 +72,9 @@
 
 @media (max-width: 560px) {
   .hero {
-    padding-block: 5.5rem 2.5rem;
-    align-items: flex-end;
+    min-height: auto;
+    padding-block: 5.5rem 4.5rem;
+    align-items: flex-start;
   }
 
   .actions {

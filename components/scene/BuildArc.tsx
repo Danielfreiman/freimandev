@@ -40,6 +40,7 @@ export function BuildArc({ children }: { children: ReactNode }) {
       <div ref={arcRef} className={styles.arc}>
         <BuildStack
           arcRef={arcRef}
+          activeId={active?.id ?? null}
           emphasis={active?.emphasis ?? []}
           preview={active?.preview ?? null}
         />

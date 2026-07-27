@@ -55,6 +55,29 @@
   gap: 0.5rem;
 }
 
+.budget {
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  width: fit-content;
+  min-width: 13rem;
+  margin-bottom: 0.65rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--paper);
+  background: var(--paper);
+  color: var(--void);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.budget:hover {
+  background: var(--off-white);
+}
+
 .whatsapp {
   display: inline-flex;
   align-items: center;

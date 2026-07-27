@@ -1,35 +1,41 @@
 /* =========================================================================
-   Freiman Dev — design tokens
-   -------------------------------------------------------------------------
-   Palette is derived from the real brand: #B6F36B is the fill of the live
-   icon.svg, #080A0F is the live site background. The signal colour has one
-   job only — it marks the "no ar" state. Anything unbuilt is drawn in steel
-   hairlines with no fill, so colour itself encodes "da demanda ao ar".
+   Freiman Dev — official colour system
+   Deep Black, Graphite, Mid Gray, Light Gray, Off White and Accent Blue.
+   Blue marks interaction, selection and the final "no ar" state.
    ========================================================================= */
 
 :root {
-  /* Surfaces, deepest to nearest */
-  --void: #05070a;
-  --surface: #0a0d12;
-  --graphite: #12171e;
-  --plane: #161c24;
+  /* Official palette */
+  --deep-black: #0a0a0a;
+  --brand-graphite: #1a1a1c;
+  --mid-gray: #4a4a4f;
+  --light-gray: #d7d7da;
+  --off-white: #f5f5f3;
+  --accent-blue: #2563ff;
+
+  /* Semantic aliases */
+  --void: var(--deep-black);
+  --surface: var(--deep-black);
+  --graphite: var(--brand-graphite);
+  --plane: var(--brand-graphite);
 
   /* Lines & text */
-  --edge: #1e262f;
-  --edge-strong: #2b3540;
-  /* Muted, but light enough to clear WCAG AA (4.5:1) for small text on the
-     lightest surface it appears on (--graphite, in the contact panel). */
-  --steel: #7c8794;
-  --steel-bright: #98a3af;
-  --paper: #e9edf2;
+  --edge: rgba(215, 215, 218, 0.12);
+  --edge-strong: rgba(215, 215, 218, 0.24);
+  --steel: rgba(215, 215, 218, 0.58);
+  --steel-bright: var(--light-gray);
+  --paper: var(--off-white);
 
-  /* The one accent: publication / live */
-  --signal: #b6f36b;
-  --signal-dim: rgba(182, 243, 107, 0.14);
+  /* The one accent: interaction / publication / live */
+  --signal: var(--accent-blue);
+  --signal-dim: rgba(37, 99, 255, 0.16);
 
   /* Type */
   --font-display: var(--font-bricolage), "Helvetica Neue", Arial, sans-serif;
-  --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", monospace;
+  --font-body: var(--font-roboto), Arial, sans-serif;
+  /* Existing technical components keep their spacing/case treatment, but use
+     Roboto as requested instead of introducing a third family. */
+  --font-mono: var(--font-body);
 
   --step--1: clamp(0.75rem, 0.72rem + 0.15vw, 0.82rem);
   --step-0: clamp(0.95rem, 0.9rem + 0.25vw, 1.05rem);
@@ -70,7 +76,7 @@ body {
   margin: 0;
   background: var(--void);
   color: var(--paper);
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: var(--step-0);
   line-height: 1.6;
   font-synthesis-weight: none;
@@ -92,6 +98,14 @@ blockquote,
 ul,
 ol {
   margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 400;
 }
 
 ul,

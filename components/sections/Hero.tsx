@@ -1,12 +1,15 @@
 import { whatsappUrl } from "@/data/brand";
 import { Action } from "@/components/ui/Action";
+import { TypeIn } from "@/components/ui/TypeIn";
 import styles from "./Hero.module.css";
 
 export function Hero() {
   return (
     <section id="topo" className={styles.hero}>
       <div className={`shell ${styles.inner}`}>
-        <p className="eyebrow">Desenvolvimento web sob demanda</p>
+        <p className="eyebrow">
+          <TypeIn text="Desenvolvimento web sob demanda" delay={1450} />
+        </p>
 
         {/* The space between the lines is significant: without it the
             accessible name collapses to "Da demandaao ar.". */}

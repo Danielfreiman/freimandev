@@ -7,6 +7,7 @@ import {
   useReducedMotion,
   usePointerTilt,
 } from "@/components/scene/useSceneMotion";
+import { TypeIn } from "@/components/ui/TypeIn";
 import styles from "./SelectedWork.module.css";
 
 export function SelectedWork() {
@@ -29,7 +30,9 @@ export function SelectedWork() {
   return (
     <section id="projetos" className={styles.section}>
       <div className={`shell ${styles.head}`}>
-        <p className="eyebrow">Projetos entregues</p>
+        <p className="eyebrow">
+          <TypeIn text="Projetos entregues" />
+        </p>
         <h2 className={styles.title}>Sites que já estão no ar.</h2>
       </div>
 

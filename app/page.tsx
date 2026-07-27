@@ -4,6 +4,7 @@ import { Capabilities } from "@/components/sections/Capabilities";
 import { SelectedWork } from "@/components/sections/SelectedWork";
 import { Process } from "@/components/sections/Process";
 import { Engagement } from "@/components/sections/Engagement";
+import { Budget } from "@/components/sections/Budget";
 import { Contact } from "@/components/sections/Contact";
 
 export default function Page() {
@@ -19,6 +20,7 @@ export default function Page() {
       <SelectedWork />
       <Process />
       <Engagement />
+      <Budget />
       <Contact />
     </>
   );

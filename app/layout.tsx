@@ -1,28 +1,23 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, IBM_Plex_Mono } from "next/font/google";
+import { Bricolage_Grotesque, Roboto } from "next/font/google";
 import { BRAND, SITE_URL, WHATSAPP_DISPLAY } from "@/data/brand";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { SceneBoot } from "@/components/scene/SceneBoot";
 import "./globals.css";
 
-/**
- * Two families only. Bricolage Grotesque is the studio voice — a contemporary
- * grotesque with real detailing (variable optical size and width), chosen
- * against the neutral Helvetica/Inter default. IBM Plex Mono is the machine
- * voice and is earned by the brand mark itself, which is a terminal prompt.
- */
+/** Bricolage is reserved for headings; Roboto handles every utility role. */
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-bricolage",
 });
 
-const plexMono = IBM_Plex_Mono({
+const roboto = Roboto({
   subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: ["400", "500", "700"],
   display: "swap",
-  variable: "--font-plex-mono",
+  variable: "--font-roboto",
 });
 
 export const metadata: Metadata = {
@@ -58,7 +53,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#05070a",
+  themeColor: "#0a0a0a",
   colorScheme: "dark",
 };
 
@@ -86,7 +81,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="pt-BR" className={`${bricolage.variable} ${plexMono.variable}`}>
+    <html lang="pt-BR" className={`${bricolage.variable} ${roboto.variable}`}>
       <body>
         <script
           type="application/ld+json"

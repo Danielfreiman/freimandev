@@ -53,6 +53,14 @@ export function Header() {
         </nav>
 
         <a
+          className={`${styles.cta} ${styles.budgetCta}`}
+          href="#orcamento"
+        >
+          Montar orçamento
+          <span aria-hidden="true">→</span>
+        </a>
+
+        <a
           className={styles.cta}
           href={whatsappUrl()}
           target="_blank"
@@ -89,6 +97,13 @@ export function Header() {
               {link.label}
             </a>
           ))}
+          <a
+            className={styles.panelCta}
+            href="#orcamento"
+            onClick={() => setMenuOpen(false)}
+          >
+            Montar orçamento →
+          </a>
           <a
             className={styles.panelLink}
             href={whatsappUrl()}

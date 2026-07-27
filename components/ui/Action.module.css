@@ -29,7 +29,7 @@
 }
 
 .solid:hover {
-  background: #ffffff;
+  background: var(--off-white);
 }
 
 .line {
@@ -39,7 +39,7 @@
 
 .line:hover {
   border-color: var(--steel-bright);
-  background: rgba(233, 237, 242, 0.04);
+  background: rgba(245, 245, 243, 0.04);
 }
 
 .label {

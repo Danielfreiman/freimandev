@@ -8,7 +8,7 @@ import {
   useState,
 } from "react";
 import { SCENE_LAYERS, type LayerId } from "@/data/scene";
-import type { PreviewBlock } from "@/data/capabilities";
+import { CAPABILITIES, type PreviewBlock } from "@/data/capabilities";
 import {
   useReducedMotion,
   useScrollProgress,
@@ -50,6 +50,8 @@ function stageFor(progress: number): number {
 type BuildStackProps = {
   /** The tall section whose scroll drives assembly. */
   arcRef: RefObject<HTMLDivElement | null>;
+  /** Service whose sheet should rise above the stack. */
+  activeId: string | null;
   /** Layers lit up by the currently selected capability. */
   emphasis: readonly LayerId[];
   /** Schematic drawn inside the frame; falls back to a neutral page. */
@@ -66,7 +68,12 @@ const DEFAULT_PREVIEW: PreviewBlock[] = [
   { x: 52, y: 60, w: 42, h: 33, tone: "line", label: "Imagem" },
 ];
 
-export function BuildStack({ arcRef, emphasis, preview }: BuildStackProps) {
+export function BuildStack({
+  arcRef,
+  activeId,
+  emphasis,
+  preview,
+}: BuildStackProps) {
   const fieldRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
   const [stage, setStage] = useState(reduced ? STAGES.length - 1 : 0);
@@ -75,7 +82,7 @@ export function BuildStack({ arcRef, emphasis, preview }: BuildStackProps) {
     const field = fieldRef.current;
     if (!field) return;
     field.style.setProperty("--p", progress.toFixed(4));
-    // The build slides aside as the capability list takes the left column.
+    // The stack slides right to keep the service catalog clear on the left.
     field.style.setProperty("--shift", (progress * 16).toFixed(2));
     setStage((current) => {
       const next = stageFor(progress);
@@ -125,8 +132,8 @@ export function BuildStack({ arcRef, emphasis, preview }: BuildStackProps) {
                     "--sz": scatter.z,
                     "--srx": scatter.rx,
                     "--sry": scatter.ry,
-                    "--slot-y": (offset * 5).toFixed(1),
-                    "--slot-z": (offset * 13).toFixed(1),
+                    "--slot-y": (offset * 17).toFixed(1),
+                    "--slot-z": (offset * 22).toFixed(1),
                     "--emph": emphasised.has(layer.id) ? 1 : 0,
                   } as CSSProperties
                 }
@@ -136,6 +143,55 @@ export function BuildStack({ arcRef, emphasis, preview }: BuildStackProps) {
                   {layer.label}
                   <span className={styles.planeNote}>{layer.note}</span>
                 </span>
+              </li>
+            );
+          })}
+        </ul>
+
+        <ul className={styles.serviceSheets} aria-hidden="true">
+          {CAPABILITIES.map((capability, index) => {
+            const isActive = capability.id === activeId;
+            return (
+              <li
+                key={capability.id}
+                className={`${styles.serviceSheet} ${
+                  isActive ? styles.serviceSheetActive : ""
+                }`}
+                style={
+                  {
+                    "--sheet-x": index * 2.5 - 11,
+                    "--sheet-y": index * 7 - 30,
+                    "--sheet-z": 70 - index * 18,
+                  } as CSSProperties
+                }
+              >
+                <div className={styles.sheetBar}>
+                  <span>{capability.label}</span>
+                  <span className={styles.sheetState}>
+                    <i />
+                    {isActive ? "selecionado" : "serviço"}
+                  </span>
+                </div>
+                <div className={styles.sheetPage}>
+                  {capability.preview.map((block, blockIndex) => (
+                    <span
+                      key={blockIndex}
+                      className={`${styles.sheetBlock} ${
+                        styles[block.tone ?? "line"] ?? ""
+                      }`}
+                      style={{
+                        left: `${block.x}%`,
+                        top: `${block.y}%`,
+                        width: `${block.w}%`,
+                        height: `${block.h}%`,
+                      }}
+                    >
+                      {block.label ? (
+                        <span className={styles.blockLabel}>{block.label}</span>
+                      ) : null}
+                    </span>
+                  ))}
+                </div>
               </li>
             );
           })}

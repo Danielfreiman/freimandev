@@ -17,7 +17,7 @@
   background:
     radial-gradient(
       70% 90% at 50% 0%,
-      rgba(182, 243, 107, 0.05),
+      rgba(37, 99, 255, 0.07),
       transparent 70%
     ),
     var(--graphite);

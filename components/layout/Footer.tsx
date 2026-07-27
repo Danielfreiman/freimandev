@@ -24,6 +24,10 @@ export function Footer() {
         </nav>
 
         <div className={styles.contact}>
+          <a className={styles.budget} href="#orcamento">
+            Montar orçamento
+            <span aria-hidden="true">→</span>
+          </a>
           <a
             className={styles.whatsapp}
             href={whatsappUrl()}

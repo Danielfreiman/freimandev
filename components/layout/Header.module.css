@@ -13,7 +13,7 @@
 
 /* Overlays the scene at rest; gains just enough surface once you move. */
 .condensed {
-  background: rgba(5, 7, 10, 0.72);
+  background: rgba(10, 10, 10, 0.76);
   backdrop-filter: blur(10px);
   border-bottom-color: var(--edge);
 }
@@ -88,7 +88,18 @@
 
 .cta:hover {
   border-color: var(--steel-bright);
-  background: rgba(233, 237, 242, 0.05);
+  background: rgba(245, 245, 243, 0.05);
+}
+
+.budgetCta {
+  border-color: var(--paper);
+  background: var(--paper);
+  color: var(--void);
+}
+
+.budgetCta:hover {
+  border-color: var(--off-white);
+  background: var(--off-white);
 }
 
 .toggle {
@@ -105,7 +116,7 @@
 .panel {
   display: none;
   border-top: 1px solid var(--edge);
-  background: rgba(5, 7, 10, 0.96);
+  background: rgba(10, 10, 10, 0.96);
   backdrop-filter: blur(12px);
 }
 
@@ -125,7 +136,22 @@
   color: var(--paper);
 }
 
-@media (max-width: 860px) {
+.panelCta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 48px;
+  margin-top: 1rem;
+  padding: 0.8rem 1rem;
+  background: var(--paper);
+  color: var(--void);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1080px) {
   .nav,
   .cta {
     display: none;

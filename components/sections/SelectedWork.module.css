@@ -143,7 +143,7 @@
   position: absolute;
   inset: 0;
   border: 1px solid var(--edge);
-  background: rgba(10, 13, 18, 0.6);
+  background: rgba(26, 26, 28, 0.64);
   opacity: 0;
   transition:
     opacity var(--dur-slow) var(--ease-out),
