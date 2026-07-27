@@ -1,0 +1,85 @@
+.field {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.9rem 1rem;
+  border: 1px dashed var(--edge-strong);
+}
+
+.field label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.field label span {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.field strong {
+  color: var(--paper);
+  font-size: var(--step--1);
+}
+
+.field small,
+.field input,
+.field p {
+  color: var(--steel);
+  font-size: var(--step--1);
+}
+
+.field small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.field input {
+  max-width: 14rem;
+}
+
+.field button {
+  padding: 0.55rem 0.85rem;
+  border: 1px solid var(--signal);
+  color: var(--signal);
+  font-size: var(--step--1);
+  white-space: nowrap;
+}
+
+.field button:hover:not(:disabled) {
+  background: var(--signal);
+  color: var(--deep-black);
+}
+
+.field button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.field p {
+  grid-column: 1 / -1;
+  color: var(--steel-bright);
+}
+
+@media (max-width: 640px) {
+  .field,
+  .field label {
+    grid-template-columns: 1fr;
+    align-items: flex-start;
+  }
+
+  .field label {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .field button {
+    justify-self: start;
+  }
+}

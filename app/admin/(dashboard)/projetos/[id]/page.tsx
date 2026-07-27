@@ -36,7 +36,7 @@ export default async function ProjetoDetailPage({
 
   const { data: project } = await supabase
     .from("projects")
-    .select("*, clients(name, company)")
+    .select("*, clients(name, company, logo_url)")
     .eq("id", id)
     .single();
 
@@ -68,7 +68,7 @@ export default async function ProjetoDetailPage({
 
   const client =
     project.clients && !Array.isArray(project.clients)
-      ? (project.clients as { name: string; company: string | null })
+      ? (project.clients as { name: string; company: string | null; logo_url: string | null })
       : null;
   const clientName = client?.name ?? "—";
 
@@ -131,8 +131,10 @@ export default async function ProjetoDetailPage({
           items={budgetRes.data ?? []}
           totalValue={Number(project.total_value)}
           projectName={project.name}
+          clientId={project.client_id}
           clientName={clientName}
           clientCompany={client?.company}
+          clientLogoPath={client?.logo_url}
         />
       </section>
 

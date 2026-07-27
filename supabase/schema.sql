@@ -35,6 +35,7 @@ create table clients (
   email       text,
   phone       text,
   notes       text,
+  logo_url    text,
   created_at  timestamptz not null default now(),
   updated_at  timestamptz not null default now()
 );

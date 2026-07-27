@@ -123,6 +123,55 @@
   font-size: var(--step--1);
 }
 
+.comparisonList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 0.25rem;
+}
+
+.help {
+  margin-top: 0.2rem;
+  color: var(--steel);
+  font-size: var(--step--1);
+}
+
+.comparisonCard {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--edge);
+  background: var(--brand-graphite);
+}
+
+.comparisonHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--edge);
+}
+
+.comparisonHead span {
+  color: var(--signal);
+  font-family: var(--font-display);
+  font-size: var(--step--1);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.comparisonHead button {
+  color: var(--steel);
+  font-size: var(--step--1);
+}
+
+.comparisonHead button:hover {
+  color: #ef4444;
+}
+
 .actions {
   display: flex;
   flex-wrap: wrap;

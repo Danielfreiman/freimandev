@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Script from "next/script";
-import { createBudgetPdf, type BudgetBrief } from "@/lib/createBudgetPdf";
+import type { BudgetBrief } from "@/lib/createBudgetPdf";
 import { TypeIn } from "@/components/ui/TypeIn";
 import styles from "./Budget.module.css";
 
@@ -213,7 +213,6 @@ export function Budget() {
         resetTurnstile();
         return;
       }
-      createBudgetPdf(submissionData);
       setGenerated(true);
     } catch {
       setError("Não foi possível enviar o briefing. Verifique sua conexão.");
@@ -221,6 +220,55 @@ export function Budget() {
     } finally {
       setSending(false);
     }
+  }
+
+  function startAnotherBriefing() {
+    setStep(0);
+    setData(INITIAL_DATA);
+    setError("");
+    setGenerated(false);
+    setWebsite("");
+    setTurnstileToken("");
+    setTurnstileResetKey((current) => current + 1);
+    setOtherFeatureEnabled(false);
+    setOtherFeature("");
+  }
+
+  if (generated) {
+    return (
+      <section id="orcamento" className={styles.section}>
+        <div className={`shell ${styles.successScreen}`}>
+          <div className={styles.successMark} aria-hidden="true">
+            ✓
+          </div>
+          <div className={styles.successContent}>
+            <p className="eyebrow">Briefing recebido</p>
+            <h2>Parabéns, recebemos seu contato.</h2>
+            <p>
+              Obrigado por compartilhar os detalhes do projeto. Vamos analisar
+              as informações e retornaremos tão breve quanto possível.
+            </p>
+          </div>
+          <div className={styles.successDetails}>
+            <div>
+              <span>Confirmação enviada para</span>
+              <strong>{data.email}</strong>
+            </div>
+            <div>
+              <span>Próximo passo</span>
+              <strong>Análise do briefing pela Freiman Dev</strong>
+            </div>
+          </div>
+          <button
+            type="button"
+            className={styles.newBriefing}
+            onClick={startAnotherBriefing}
+          >
+            Enviar outro briefing
+          </button>
+        </div>
+      </section>
+    );
   }
 
   return (
@@ -232,7 +280,7 @@ export function Budget() {
         <h2 className={styles.title}>Um orçamento começa com as perguntas certas.</h2>
         <p className={styles.lead}>
           Organize o essencial do projeto em poucos minutos. Ao enviar, o
-          briefing chega diretamente à equipe e uma cópia em PDF é baixada.
+          briefing chega diretamente à equipe e você recebe uma confirmação por email.
         </p>
       </div>
 
@@ -440,10 +488,10 @@ export function Budget() {
                 />
               </label>
               <div className={styles.ready}>
-                <span aria-hidden="true">PDF</span>
+                <span aria-hidden="true">OK</span>
                 <p>
                   <strong>Seu briefing está pronto.</strong>
-                  Ao enviar, as respostas chegam à Freiman Dev e o PDF é baixado imediatamente.
+                  Ao enviar, as respostas chegam à Freiman Dev para análise.
                 </p>
               </div>
               {TURNSTILE_SITE_KEY ? (
@@ -459,9 +507,6 @@ export function Budget() {
           <div className={styles.formFooter}>
             <div aria-live="polite">
               {error ? <p className={styles.error}>{error}</p> : null}
-              {generated ? (
-                <p className={styles.success}>Briefing enviado e PDF baixado.</p>
-              ) : null}
             </div>
             <div className={styles.actions}>
               {step > 0 ? (
@@ -487,7 +532,7 @@ export function Budget() {
                   disabled={sending}
                   onClick={submitBriefing}
                 >
-                  {sending ? "Enviando..." : "Enviar briefing e baixar PDF"}{" "}
+                  {sending ? "Enviando..." : "Enviar briefing"}{" "}
                   <span aria-hidden="true">→</span>
                 </button>
               )}

@@ -1,10 +1,15 @@
 -- Rodar somente se o schema.sql anterior já tiver sido executado.
 -- Em instalações novas, basta rodar o schema.sql atualizado.
 
+alter table clients
+  add column if not exists logo_url text;
+
 alter table contracts
   drop constraint if exists contracts_upfront_percent_check;
 
-update contracts set upfront_percent = 50;
+update contracts
+set upfront_percent = 50
+where upfront_percent is distinct from 50;
 
 alter table contracts
   add constraint contracts_upfront_percent_check check (upfront_percent = 50);

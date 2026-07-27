@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import {
@@ -9,6 +9,7 @@ import {
   fileToDataUrl,
   safeFileName,
 } from "@/lib/adminPdf";
+import { ClientLogoField } from "./ClientLogoField";
 import styles from "./DocumentEditor.module.css";
 
 type Deliverable = {
@@ -18,69 +19,233 @@ type Deliverable = {
   items: unknown;
 } | null;
 
-type StoredContent = {
-  projectType?: "novo" | "repaginacao";
-  entries?: string[];
+type StoredComparison = {
+  id: string;
+  title: string;
+  beforePath: string;
+  afterPath: string;
 };
 
-function readStoredContent(value: unknown): Required<StoredContent> {
+type StoredContent = {
+  projectType: "novo" | "repaginacao";
+  entries: string[];
+  comparisons: StoredComparison[];
+};
+
+type Comparison = StoredComparison & {
+  beforeFile: File | null;
+  afterFile: File | null;
+  beforeData: string | null;
+  afterData: string | null;
+  beforeName: string;
+  afterName: string;
+};
+
+function readStoredContent(value: unknown): StoredContent {
   if (Array.isArray(value)) {
     return {
       projectType: "novo",
       entries: value.filter((item): item is string => typeof item === "string"),
+      comparisons: [],
     };
   }
+
   if (value && typeof value === "object") {
-    const stored = value as StoredContent;
+    const stored = value as Partial<StoredContent>;
     return {
       projectType: stored.projectType === "repaginacao" ? "repaginacao" : "novo",
       entries: Array.isArray(stored.entries)
         ? stored.entries.filter((item): item is string => typeof item === "string")
         : [""],
+      comparisons: Array.isArray(stored.comparisons)
+        ? stored.comparisons.filter(
+            (item): item is StoredComparison =>
+              Boolean(
+                item &&
+                  typeof item.id === "string" &&
+                  typeof item.title === "string" &&
+                  typeof item.beforePath === "string" &&
+                  typeof item.afterPath === "string",
+              ),
+          )
+        : [],
     };
   }
-  return { projectType: "novo", entries: [""] };
+
+  return { projectType: "novo", entries: [""], comparisons: [] };
+}
+
+function comparisonFromStored(item: StoredComparison): Comparison {
+  return {
+    ...item,
+    beforeFile: null,
+    afterFile: null,
+    beforeData: null,
+    afterData: null,
+    beforeName: item.beforePath ? "Imagem salva" : "",
+    afterName: item.afterPath ? "Imagem salva" : "",
+  };
+}
+
+function emptyComparison(index: number): Comparison {
+  return {
+    id: `comparativo-${Date.now()}-${index}`,
+    title: "",
+    beforePath: "",
+    afterPath: "",
+    beforeFile: null,
+    afterFile: null,
+    beforeData: null,
+    afterData: null,
+    beforeName: "",
+    afterName: "",
+  };
 }
 
 export function DeliverableEditor({
   projectId,
   projectName,
+  clientId,
   clientName,
+  clientLogoPath,
   existing,
 }: {
   projectId: string;
   projectName: string;
+  clientId: string;
   clientName: string;
+  clientLogoPath: string | null;
   existing: Deliverable;
 }) {
-  const stored = readStoredContent(existing?.items);
+  const initialContent = useRef(readStoredContent(existing?.items)).current;
+  const [recordId, setRecordId] = useState(existing?.id ?? null);
   const [title, setTitle] = useState(existing?.title ?? `Entrega — ${projectName}`);
   const [description, setDescription] = useState(existing?.description ?? "");
-  const [projectType, setProjectType] = useState<"novo" | "repaginacao">(stored.projectType);
-  const [items, setItems] = useState(stored.entries.length ? stored.entries : [""]);
+  const [projectType, setProjectType] = useState<"novo" | "repaginacao">(
+    initialContent.projectType,
+  );
+  const [items, setItems] = useState(
+    initialContent.entries.length ? initialContent.entries : [""],
+  );
+  const [comparisons, setComparisons] = useState<Comparison[]>(
+    initialContent.comparisons.length
+      ? initialContent.comparisons.map(comparisonFromStored)
+      : [emptyComparison(0)],
+  );
   const [clientLogo, setClientLogo] = useState<string | null>(null);
-  const [beforeImage, setBeforeImage] = useState<string | null>(null);
-  const [afterImage, setAfterImage] = useState<string | null>(null);
-  const [assetNames, setAssetNames] = useState({ logo: "", before: "", after: "" });
   const [saving, setSaving] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [message, setMessage] = useState("");
   const router = useRouter();
 
-  async function loadImage(
-    file: File | undefined,
-    target: "logo" | "before" | "after",
+  async function storageImageToDataUrl(path: string) {
+    const supabase = createClient();
+    const { data } = await supabase.storage
+      .from("admin-documents")
+      .createSignedUrl(path, 120);
+    if (!data?.signedUrl) return null;
+    const response = await fetch(data.signedUrl);
+    if (!response.ok) return null;
+    const blob = await response.blob();
+    return fileToDataUrl(new File([blob], "imagem", { type: blob.type }));
+  }
+
+  useEffect(() => {
+    if (!existing?.id || !initialContent.comparisons.length) return;
+    let active = true;
+
+    async function loadSavedComparisons() {
+      const loaded = await Promise.all(
+        initialContent.comparisons.map(async (item) => ({
+          ...comparisonFromStored(item),
+          beforeData: await storageImageToDataUrl(item.beforePath),
+          afterData: await storageImageToDataUrl(item.afterPath),
+        })),
+      );
+      if (active) setComparisons(loaded);
+    }
+
+    loadSavedComparisons();
+    return () => {
+      active = false;
+    };
+  }, [existing?.id, initialContent]);
+
+  async function selectComparisonImage(
+    comparisonId: string,
+    side: "before" | "after",
+    file?: File,
   ) {
     if (!file) return;
-    if (!file.type.startsWith("image/")) {
-      setMessage("Selecione uma imagem PNG, JPG ou WebP.");
+    if (!["image/png", "image/jpeg", "image/webp"].includes(file.type)) {
+      setMessage("Use imagens PNG, JPG ou WebP.");
+      return;
+    }
+    if (file.size > 8 * 1024 * 1024) {
+      setMessage("Cada imagem deve ter no máximo 8 MB.");
       return;
     }
     const dataUrl = await fileToDataUrl(file);
-    if (target === "logo") setClientLogo(dataUrl);
-    if (target === "before") setBeforeImage(dataUrl);
-    if (target === "after") setAfterImage(dataUrl);
-    setAssetNames((current) => ({ ...current, [target]: file.name }));
+    setComparisons((current) =>
+      current.map((comparison) =>
+        comparison.id === comparisonId
+          ? {
+              ...comparison,
+              [`${side}File`]: file,
+              [`${side}Data`]: dataUrl,
+              [`${side}Name`]: file.name,
+            }
+          : comparison,
+      ),
+    );
+    setMessage("Imagem selecionada. Salve o entregável para confirmar.");
+  }
+
+  function validateComparisons() {
+    if (projectType !== "repaginacao") return true;
+    const valid =
+      comparisons.length > 0 &&
+      comparisons.every(
+        (comparison) =>
+          comparison.title.trim() &&
+          (comparison.beforeFile || comparison.beforePath) &&
+          (comparison.afterFile || comparison.afterPath),
+      );
+    if (!valid) {
+      setMessage("Cada comparativo precisa de título, imagem anterior e imagem do resultado.");
+    }
+    return valid;
+  }
+
+  async function uploadComparison(
+    deliverableId: string,
+    comparison: Comparison,
+  ): Promise<Comparison> {
+    const supabase = createClient();
+    let beforePath = comparison.beforePath;
+    let afterPath = comparison.afterPath;
+
+    for (const side of ["before", "after"] as const) {
+      const file = comparison[`${side}File`];
+      if (!file) continue;
+      const path = `deliverables/${projectId}/${deliverableId}/${comparison.id}-${side}`;
+      const { error } = await supabase.storage
+        .from("admin-documents")
+        .upload(path, file, { contentType: file.type, upsert: true });
+      if (error) throw error;
+      if (side === "before") beforePath = path;
+      else afterPath = path;
+    }
+
+    return {
+      ...comparison,
+      beforePath,
+      afterPath,
+      beforeFile: null,
+      afterFile: null,
+      beforeName: "Imagem salva",
+      afterName: "Imagem salva",
+    };
   }
 
   async function saveDeliverable() {
@@ -88,89 +253,150 @@ export function DeliverableEditor({
       setMessage("Informe um título.");
       return null;
     }
+    if (!validateComparisons()) return null;
+
     setSaving(true);
     setMessage("");
-    const payload = {
-      project_id: projectId,
-      title: title.trim(),
-      description: description.trim() || null,
-      items: {
-        projectType,
-        entries: items.filter((item) => item.trim()),
-      },
-    };
     const supabase = createClient();
-    const result = existing
-      ? await supabase.from("deliverables").update(payload).eq("id", existing.id).select("id").single()
-      : await supabase.from("deliverables").insert(payload).select("id").single();
-    setSaving(false);
+    let deliverableId = recordId;
 
-    if (result.error || !result.data) {
-      setMessage("Não foi possível salvar o entregável.");
+    if (!deliverableId) {
+      const { data, error } = await supabase
+        .from("deliverables")
+        .insert({
+          project_id: projectId,
+          title: title.trim(),
+          description: description.trim() || null,
+          items: { projectType, entries: [], comparisons: [] },
+        })
+        .select("id")
+        .single();
+      if (error || !data) {
+        setMessage("Não foi possível criar o entregável.");
+        setSaving(false);
+        return null;
+      }
+      deliverableId = data.id;
+      setRecordId(data.id);
+    }
+
+    try {
+      const savedComparisons =
+        projectType === "repaginacao"
+          ? await Promise.all(
+              comparisons.map((comparison) =>
+                uploadComparison(deliverableId!, comparison),
+              ),
+            )
+          : [];
+      const storedComparisons = savedComparisons.map(
+        ({ id, title: comparisonTitle, beforePath, afterPath }) => ({
+          id,
+          title: comparisonTitle.trim(),
+          beforePath,
+          afterPath,
+        }),
+      );
+
+      const { error } = await supabase
+        .from("deliverables")
+        .update({
+          title: title.trim(),
+          description: description.trim() || null,
+          items: {
+            projectType,
+            entries: items.filter((item) => item.trim()),
+            comparisons: storedComparisons,
+          },
+        })
+        .eq("id", deliverableId);
+      if (error) throw error;
+
+      setComparisons(savedComparisons.length ? savedComparisons : comparisons);
+      setMessage("Entregável e imagens salvos.");
+      if (!existing) {
+        router.replace(`/admin/projetos/${projectId}/entregavel/${deliverableId}`);
+      }
+      router.refresh();
+      setSaving(false);
+      return { id: deliverableId, comparisons: savedComparisons };
+    } catch {
+      setMessage("Não foi possível salvar o entregável e suas imagens.");
+      setSaving(false);
       return null;
     }
-    setMessage("Entregável salvo.");
-    if (!existing) router.replace(`/admin/projetos/${projectId}/entregavel/${result.data.id}`);
-    router.refresh();
-    return result.data.id;
   }
 
   async function generateDeliverable() {
-    if (projectType === "repaginacao" && (!beforeImage || !afterImage)) {
-      setMessage("Projetos de repaginação precisam das imagens de antes e depois.");
-      return;
-    }
-
     setGenerating(true);
-    const id = await saveDeliverable();
-    if (!id) {
+    const saved = await saveDeliverable();
+    if (!saved) {
       setGenerating(false);
       return;
     }
 
-    const sections = [
-      {
-        heading: "Visão geral",
-        lines: [
-          description || "Entrega concluída conforme o escopo aprovado.",
-          `Tipo de projeto: ${projectType === "repaginacao" ? "Repaginação" : "Novo projeto"}.`,
-        ],
-      },
-      ...(projectType === "repaginacao" && beforeImage && afterImage
-        ? [
-            {
-              heading: "Evolução visual",
-              lines: ["Comparativo do projeto antes e depois da intervenção."],
-              images: [
-                { dataUrl: beforeImage, label: "Antes", caption: "Estado anterior do projeto" },
-                { dataUrl: afterImage, label: "Depois", caption: "Resultado entregue" },
-              ],
-            },
-          ]
-        : []),
-      {
-        heading: "O que foi entregue",
-        lines: items
-          .filter((item) => item.trim())
-          .map((item, index) => `${index + 1}. ${item}`),
-      },
-      {
-        heading: "Encerramento",
-        lines: [
-          "Este documento registra os itens disponibilizados ao cliente na conclusão desta etapa.",
-          `Data da geração: ${new Date().toLocaleDateString("pt-BR")}.`,
-        ],
-      },
-    ];
+    const comparisonsWithData = await Promise.all(
+      saved.comparisons.map(async (comparison) => ({
+        ...comparison,
+        beforeData:
+          comparison.beforeData ||
+          (comparison.beforePath
+            ? await storageImageToDataUrl(comparison.beforePath)
+            : null),
+        afterData:
+          comparison.afterData ||
+          (comparison.afterPath
+            ? await storageImageToDataUrl(comparison.afterPath)
+            : null),
+      })),
+    );
 
     const blob = createAdminPdf(
       title,
       `${projectName} · ${clientName}`,
-      sections,
-      {
-        clientLogo,
-        documentLabel: "Relatório de entrega",
-      },
+      [
+        {
+          heading: "Visão geral",
+          lines: [
+            description || "Entrega concluída conforme o escopo aprovado.",
+            `Tipo de projeto: ${projectType === "repaginacao" ? "Repaginação" : "Novo projeto"}.`,
+          ],
+        },
+        ...comparisonsWithData
+          .filter(
+            (comparison) => comparison.beforeData && comparison.afterData,
+          )
+          .map((comparison) => ({
+            heading: comparison.title,
+            lines: ["Comparativo antes e depois da intervenção."],
+            images: [
+              {
+                dataUrl: comparison.beforeData!,
+                label: "Antes",
+                caption: `${comparison.title} — estado anterior`,
+              },
+              {
+                dataUrl: comparison.afterData!,
+                label: "Depois",
+                caption: `${comparison.title} — resultado entregue`,
+              },
+            ],
+          })),
+        {
+          heading: "O que foi entregue",
+          lines: items
+            .filter((item) => item.trim())
+            .map((item, index) => `${index + 1}. ${item}`),
+        },
+        {
+          heading: "Encerramento",
+          lines: [
+            "Este documento registra os itens disponibilizados ao cliente na conclusão desta etapa.",
+            `Data da geração: ${new Date().toLocaleDateString("pt-BR")}.`,
+          ],
+        },
+      ],
+      { clientLogo, documentLabel: "Relatório de entrega" },
     );
 
     try {
@@ -219,28 +445,100 @@ export function DeliverableEditor({
         <textarea className={styles.textarea} value={description} onChange={(event) => setDescription(event.target.value)} />
       </label>
 
-      <div className={styles.assetGrid}>
-        <label className={styles.assetField}>
-          <span>Logo do cliente</span>
-          <small>{assetNames.logo || "Opcional; o espaço será reservado no PDF"}</small>
-          <input type="file" accept="image/png,image/jpeg,image/webp" onChange={(event) => loadImage(event.target.files?.[0], "logo")} />
-        </label>
+      <ClientLogoField
+        clientId={clientId}
+        initialPath={clientLogoPath}
+        onLogoReady={setClientLogo}
+      />
 
-        {projectType === "repaginacao" && (
-          <>
-            <label className={styles.assetField}>
-              <span>Imagem anterior</span>
-              <small>{assetNames.before || "Obrigatória para repaginação"}</small>
-              <input type="file" accept="image/png,image/jpeg,image/webp" onChange={(event) => loadImage(event.target.files?.[0], "before")} />
-            </label>
-            <label className={styles.assetField}>
-              <span>Imagem do resultado</span>
-              <small>{assetNames.after || "Obrigatória para repaginação"}</small>
-              <input type="file" accept="image/png,image/jpeg,image/webp" onChange={(event) => loadImage(event.target.files?.[0], "after")} />
-            </label>
-          </>
-        )}
-      </div>
+      {projectType === "repaginacao" && (
+        <div className={styles.comparisonList}>
+          <div>
+            <span className={styles.label}>Comparativos de repaginação</span>
+            <p className={styles.help}>Crie um bloco para cada tela ou fluxo transformado.</p>
+          </div>
+          {comparisons.map((comparison, index) => (
+            <div className={styles.comparisonCard} key={comparison.id}>
+              <div className={styles.comparisonHead}>
+                <span>Comparativo {String(index + 1).padStart(2, "0")}</span>
+                {comparisons.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setComparisons((current) =>
+                        current.filter((item) => item.id !== comparison.id),
+                      )
+                    }
+                  >
+                    Remover
+                  </button>
+                )}
+              </div>
+              <label className={styles.field}>
+                <span className={styles.label}>Título do comparativo *</span>
+                <input
+                  className={styles.input}
+                  value={comparison.title}
+                  placeholder="Ex.: Homepage, checkout ou área do cliente"
+                  onChange={(event) =>
+                    setComparisons((current) =>
+                      current.map((item) =>
+                        item.id === comparison.id
+                          ? { ...item, title: event.target.value }
+                          : item,
+                      ),
+                    )
+                  }
+                />
+              </label>
+              <div className={styles.assetGrid}>
+                <label className={styles.assetField}>
+                  <span>Imagem anterior *</span>
+                  <small>{comparison.beforeName || "Selecione o estado anterior"}</small>
+                  <input
+                    type="file"
+                    accept="image/png,image/jpeg,image/webp"
+                    onChange={(event) =>
+                      selectComparisonImage(
+                        comparison.id,
+                        "before",
+                        event.target.files?.[0],
+                      )
+                    }
+                  />
+                </label>
+                <label className={styles.assetField}>
+                  <span>Imagem do resultado *</span>
+                  <small>{comparison.afterName || "Selecione o resultado entregue"}</small>
+                  <input
+                    type="file"
+                    accept="image/png,image/jpeg,image/webp"
+                    onChange={(event) =>
+                      selectComparisonImage(
+                        comparison.id,
+                        "after",
+                        event.target.files?.[0],
+                      )
+                    }
+                  />
+                </label>
+              </div>
+            </div>
+          ))}
+          <button
+            type="button"
+            className={styles.add}
+            onClick={() =>
+              setComparisons((current) => [
+                ...current,
+                emptyComparison(current.length),
+              ])
+            }
+          >
+            + Adicionar comparativo
+          </button>
+        </div>
+      )}
 
       <span className={styles.label}>Itens entregues</span>
       {items.map((item, index) => (

@@ -6,9 +6,9 @@ import { createClient } from "@/lib/supabase/client";
 import {
   archivePdf,
   createAdminPdf,
-  fileToDataUrl,
   safeFileName,
 } from "@/lib/adminPdf";
+import { ClientLogoField } from "./ClientLogoField";
 import styles from "./BudgetEditor.module.css";
 
 interface BudgetItem {
@@ -24,8 +24,10 @@ interface Props {
   items: BudgetItem[];
   totalValue: number;
   projectName: string;
+  clientId: string;
   clientName: string;
   clientCompany?: string | null;
+  clientLogoPath?: string | null;
 }
 
 const PRESETS = [
@@ -44,12 +46,13 @@ export function BudgetEditor({
   items: initialItems,
   totalValue,
   projectName,
+  clientId,
   clientName,
   clientCompany,
+  clientLogoPath,
 }: Props) {
   const [items, setItems] = useState(initialItems);
   const [clientLogo, setClientLogo] = useState<string | null>(null);
-  const [logoName, setLogoName] = useState("");
   const [saving, setSaving] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [message, setMessage] = useState("");
@@ -103,16 +106,6 @@ export function BudgetEditor({
         itemIndex === index ? { ...item, [field]: value } : item,
       ),
     );
-  }
-
-  async function handleLogo(file?: File) {
-    if (!file) return;
-    if (!file.type.startsWith("image/")) {
-      setMessage("Selecione uma imagem para o logo.");
-      return;
-    }
-    setClientLogo(await fileToDataUrl(file));
-    setLogoName(file.name);
   }
 
   async function saveBudget() {
@@ -309,13 +302,11 @@ export function BudgetEditor({
         + Adicionar item personalizado
       </button>
 
-      <label className={styles.logoField}>
-        <span>
-          <strong>Logo do cliente</strong>
-          <small>{logoName || "PNG ou JPG; se vazio, o PDF reserva o espaço."}</small>
-        </span>
-        <input type="file" accept="image/png,image/jpeg,image/webp" onChange={(event) => handleLogo(event.target.files?.[0])} />
-      </label>
+      <ClientLogoField
+        clientId={clientId}
+        initialPath={clientLogoPath ?? null}
+        onLogoReady={setClientLogo}
+      />
 
       <div className={styles.footer}>
         <div className={styles.total}>

@@ -252,6 +252,100 @@
 .error { color: var(--light-gray); }
 .success { color: var(--signal); }
 
+.successScreen {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 1.5rem 2rem;
+  align-items: start;
+  max-width: 58rem;
+  min-height: 28rem;
+  padding: clamp(2rem, 6vw, 4.5rem);
+  border: 1px solid var(--edge-strong);
+  background: var(--graphite);
+}
+
+.successMark {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  aspect-ratio: 1;
+  border: 1px solid var(--signal);
+  background: var(--signal);
+  color: var(--void);
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.successContent h2 {
+  max-width: 15ch;
+  margin-top: 1rem;
+  font-size: var(--step-3);
+  font-weight: 620;
+  line-height: 1.03;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.successContent > p:last-child {
+  max-width: 48ch;
+  margin-top: 1.25rem;
+  color: var(--steel-bright);
+  font-size: var(--step-1);
+}
+
+.successDetails {
+  grid-column: 2;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 1rem;
+  border-top: 1px solid var(--edge);
+  border-bottom: 1px solid var(--edge);
+}
+
+.successDetails div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1rem 0;
+}
+
+.successDetails div + div {
+  padding-left: 1rem;
+  border-left: 1px solid var(--edge);
+}
+
+.successDetails span {
+  color: var(--steel);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.successDetails strong {
+  color: var(--paper);
+  font-size: var(--step-0);
+  overflow-wrap: anywhere;
+}
+
+.newBriefing {
+  grid-column: 2;
+  justify-self: start;
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--edge-strong);
+  color: var(--steel-bright);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.newBriefing:hover {
+  border-color: var(--signal);
+  color: var(--signal);
+}
+
 .actions {
   display: flex;
   align-items: center;
@@ -365,4 +459,24 @@
   .back,
   .next { justify-content: center; }
   .next { flex: 1; }
+
+  .successScreen {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .successDetails,
+  .newBriefing {
+    grid-column: 1;
+  }
+
+  .successDetails {
+    grid-template-columns: 1fr;
+  }
+
+  .successDetails div + div {
+    padding-left: 0;
+    border-top: 1px solid var(--edge);
+    border-left: 0;
+  }
 }
