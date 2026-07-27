@@ -1,0 +1,162 @@
+.section {
+  position: relative;
+  z-index: 3;
+  background: var(--surface);
+  border-top: 1px solid var(--edge);
+  padding-block: var(--section-y);
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  margin-bottom: clamp(2.75rem, 6vh, 4.5rem);
+}
+
+.title {
+  font-size: var(--step-3);
+  font-weight: 620;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  max-width: 20ch;
+  text-wrap: balance;
+}
+
+.stages {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--edge);
+  border-block: 1px solid var(--edge);
+}
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.55rem;
+  padding: clamp(1.5rem, 3vw, 2.25rem) clamp(1rem, 2vw, 1.75rem);
+  background: var(--surface);
+}
+
+/* ---- Glyph ------------------------------------------------------------- */
+
+.glyph {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 4.5rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid var(--edge);
+}
+
+.glyph span {
+  position: absolute;
+  display: block;
+  background: var(--steel);
+  transition: all var(--dur-slow) var(--ease-out);
+}
+
+/* 01 — dispersed: fragments with no relationship to each other. */
+.step0 span {
+  width: 22%;
+  height: 3px;
+  opacity: 0.5;
+}
+.step0 span:nth-child(1) { top: 18%; left: 8%; transform: rotate(-14deg); }
+.step0 span:nth-child(2) { top: 62%; left: 22%; transform: rotate(9deg); }
+.step0 span:nth-child(3) { top: 32%; left: 52%; transform: rotate(21deg); }
+.step0 span:nth-child(4) { top: 74%; left: 62%; transform: rotate(-7deg); }
+.step0 span:nth-child(5) { top: 46%; left: 34%; transform: rotate(-24deg); }
+
+/* 02 — direction: the same fragments snapped to a grid. */
+.step1 span {
+  left: 12%;
+  height: 2px;
+  opacity: 0.6;
+}
+.step1 span:nth-child(1) { top: 22%; width: 62%; }
+.step1 span:nth-child(2) { top: 38%; width: 44%; }
+.step1 span:nth-child(3) { top: 54%; width: 70%; }
+.step1 span:nth-child(4) { top: 70%; width: 30%; }
+.step1 span:nth-child(5) { top: 86%; width: 52%; opacity: 0.3; }
+
+/* 03 — construction: blocks with weight. */
+.step2 span {
+  background: var(--steel-bright);
+  opacity: 0.75;
+}
+.step2 span:nth-child(1) { top: 14%; left: 10%; width: 46%; height: 30%; }
+.step2 span:nth-child(2) { top: 14%; left: 62%; width: 28%; height: 30%; }
+.step2 span:nth-child(3) { top: 52%; left: 10%; width: 28%; height: 34%; }
+.step2 span:nth-child(4) { top: 52%; left: 44%; width: 46%; height: 16%; }
+.step2 span:nth-child(5) { top: 74%; left: 44%; width: 32%; height: 12%; }
+
+/* 04 — publication: assembled, and the signal finally appears. */
+.step3 span {
+  background: var(--paper);
+  opacity: 0.9;
+}
+.step3 span:nth-child(1) { top: 12%; left: 10%; width: 80%; height: 4px; }
+.step3 span:nth-child(2) { top: 30%; left: 10%; width: 48%; height: 22%; }
+.step3 span:nth-child(3) { top: 30%; left: 62%; width: 28%; height: 22%; }
+.step3 span:nth-child(4) { top: 60%; left: 10%; width: 80%; height: 10%; opacity: 0.4; }
+.step3 span:nth-child(5) {
+  top: 78%;
+  left: 10%;
+  width: 26%;
+  height: 8%;
+  background: var(--signal);
+}
+
+/* ---- Copy -------------------------------------------------------------- */
+
+.index {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.2em;
+  color: var(--steel);
+}
+
+.stageTitle {
+  font-size: var(--step-1);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.stageText {
+  color: var(--steel-bright);
+  font-size: var(--step-0);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.status {
+  margin-top: auto;
+  padding-top: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--steel);
+}
+
+.statusLive {
+  color: var(--signal);
+}
+
+@media (max-width: 900px) {
+  .stages {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .stages {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .glyph {
+    height: 3.5rem;
+  }
+}

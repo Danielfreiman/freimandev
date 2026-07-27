@@ -1,0 +1,131 @@
+.section {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  padding-block: var(--section-y);
+}
+
+.inner {
+  position: relative;
+  width: 100%;
+}
+
+/* Holds the left column readable over the build without boxing it in a card. */
+.inner::before {
+  content: "";
+  position: absolute;
+  inset: -10% -6% -10% -14%;
+  z-index: -1;
+  background: radial-gradient(
+    52% 62% at 26% 50%,
+    rgba(5, 7, 10, 0.9),
+    transparent 74%
+  );
+  pointer-events: none;
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  max-width: 34rem;
+}
+
+.title {
+  font-size: var(--step-3);
+  font-weight: 620;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.75rem;
+  margin-top: 2.75rem;
+  max-width: 34rem;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* No index numbers: this is a menu of options, not a sequence. The active
+   state is carried by a rule that grows out of the margin. */
+.item {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+  padding: 0.5rem 0;
+  text-align: left;
+  color: var(--steel);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.rule {
+  display: block;
+  flex: none;
+  width: 1.5rem;
+  height: 1px;
+  background: var(--edge-strong);
+  transform-origin: left;
+  transition:
+    width var(--dur) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+
+.itemLabel {
+  font-size: var(--step-1);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.itemOn {
+  color: var(--paper);
+}
+
+.itemOn .rule {
+  width: 3.25rem;
+  background: var(--paper);
+}
+
+.detail {
+  min-height: 4.5rem;
+  max-width: var(--measure);
+  color: var(--steel-bright);
+  font-size: var(--step-0);
+  line-height: 1.55;
+  text-wrap: pretty;
+  border-top: 1px solid var(--edge);
+  padding-top: 1.25rem;
+}
+
+@media (max-width: 900px) {
+  .section {
+    min-height: auto;
+    padding-block: var(--section-y);
+  }
+
+  .inner::before {
+    inset: -8% -10%;
+    background: radial-gradient(
+      70% 60% at 50% 50%,
+      rgba(5, 7, 10, 0.92),
+      transparent 78%
+    );
+  }
+
+  .item {
+    /* Comfortable touch target — selection must not require precision. */
+    min-height: 48px;
+  }
+
+  .detail {
+    min-height: 5.5rem;
+  }
+}

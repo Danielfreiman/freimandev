@@ -1,95 +1,106 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Bricolage_Grotesque, IBM_Plex_Mono } from "next/font/google";
+import { BRAND, SITE_URL, WHATSAPP_DISPLAY } from "@/data/brand";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
+import { SceneBoot } from "@/components/scene/SceneBoot";
 import "./globals.css";
 
-const inter = Inter({
+/**
+ * Two families only. Bricolage Grotesque is the studio voice — a contemporary
+ * grotesque with real detailing (variable optical size and width), chosen
+ * against the neutral Helvetica/Inter default. IBM Plex Mono is the machine
+ * voice and is earned by the brand mark itself, which is a terminal prompt.
+ */
+const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-sans",
+  variable: "--font-bricolage",
 });
 
-const playfair = Playfair_Display({
+const plexMono = IBM_Plex_Mono({
   subsets: ["latin"],
+  weight: ["400", "500"],
   display: "swap",
-  weight: ["600", "700", "800"],
-  variable: "--font-serif",
+  variable: "--font-plex-mono",
 });
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://freiman.dev";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "Freiman Dev | Desenvolvimento de Sites de Alta Performance",
+    default: "Desenvolvimento Web Sob Demanda | Freiman Dev",
     template: "%s | Freiman Dev",
   },
   description:
-    "Sites, landing pages e e-commerces sob medida, rápidos e otimizados para SEO. Transforme sua presença digital em resultados para o seu negócio.",
-  applicationName: "Freiman Dev",
-  keywords: [
-    "desenvolvimento de sites",
-    "criação de landing page",
-    "desenvolvimento web",
-    "e-commerce",
-    "SEO técnico",
-    "Freiman Dev",
-  ],
-  authors: [{ name: "Freiman Dev", url: siteUrl }],
-  creator: "Freiman Dev",
-  publisher: "Freiman Dev",
+    "Sites, landing pages, e-commerces, integrações e melhorias técnicas executados sob demanda, com foco em performance, SEO e resultado.",
+  applicationName: BRAND.name,
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "pt_BR",
-    url: "/",
-    siteName: "Freiman Dev",
-    title: "Freiman Dev | Sites que convertem e impressionam",
+    url: SITE_URL,
+    siteName: BRAND.name,
+    title: "Desenvolvimento Web Sob Demanda | Freiman Dev",
     description:
-      "Desenvolvimento web sob medida com alta performance, design estratégico e SEO.",
-    images: [
-      {
-        url: "/assets/projects/sitio-home.png",
-        width: 1887,
-        height: 938,
-        alt: "Portfólio de desenvolvimento web da Freiman Dev",
-      },
-    ],
+      "Da demanda ao ar. Sites, landing pages, e-commerces e melhorias técnicas executados com clareza, velocidade e responsabilidade.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Freiman Dev | Sites que convertem e impressionam",
+    title: "Desenvolvimento Web Sob Demanda | Freiman Dev",
     description:
-      "Desenvolvimento web sob medida com alta performance, design estratégico e SEO.",
-    images: ["/assets/projects/sitio-home.png"],
+      "Da demanda ao ar. Sites, landing pages, e-commerces e melhorias técnicas executados sob demanda.",
   },
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-      "max-video-preview": -1,
-    },
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
-  category: "technology",
 };
 
 export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  themeColor: "#080a0f",
+  themeColor: "#05070a",
   colorScheme: "dark",
+};
+
+/** Structured data uses only facts published on the live site. */
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  name: BRAND.name,
+  url: SITE_URL,
+  description:
+    "Desenvolvimento web sob demanda: sites, landing pages, e-commerces, integrações e melhorias técnicas.",
+  telephone: WHATSAPP_DISPLAY,
+  areaServed: { "@type": "Country", name: "Brasil" },
+  availableLanguage: "pt-BR",
+  serviceType: [
+    "Desenvolvimento de sites",
+    "Landing pages",
+    "E-commerce",
+    "Integrações",
+    "Otimização de performance e SEO",
+  ],
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="pt-BR" className={`${inter.variable} ${playfair.variable}`}>
-      <body className="bg-background-dark font-sans text-slate-100 antialiased">
-        {children}
+    <html lang="pt-BR" className={`${bricolage.variable} ${plexMono.variable}`}>
+      <body>
+        <script
+          type="application/ld+json"
+          // Static, developer-authored object — no user input reaches this.
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <a className="skip-link" href="#conteudo">
+          Ir para o conteúdo
+        </a>
+        <SceneBoot />
+        <Header />
+        <main id="conteudo">{children}</main>
+        <Footer />
+        <div className="grain" aria-hidden="true" />
       </body>
     </html>
   );

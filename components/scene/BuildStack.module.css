@@ -1,0 +1,346 @@
+/* =========================================================================
+   The Build Stack — Signature Scene
+   Seven labelled planes drift in depth, converge into a browser frame and
+   resolve to the "no ar" state. All movement is transform/opacity only and is
+   driven by two inherited custom properties (--p, --mx/--my) so scrolling
+   never re-runs React.
+   ========================================================================= */
+
+.stage {
+  position: sticky;
+  top: 0;
+  z-index: 0;
+  height: 100vh;
+  height: 100svh;
+  display: grid;
+  place-items: center;
+  perspective: var(--scene-perspective);
+  perspective-origin: 50% 45%;
+  pointer-events: none;
+  /* `clip` contains the scattered 3D planes without becoming a scroll
+     container; `hidden` is the fallback for older engines. `contain: paint`
+     guarantees the planes never contribute to the document's scrollable area
+     and isolates the scene's painting from the rest of the page. */
+  overflow: hidden;
+  overflow: clip;
+  contain: paint;
+}
+
+/* Pooled light behind the build, so the planes read as lit rather than drawn.
+   Both layers are static gradients — only opacity is driven by progress, so
+   scrolling composites instead of repainting a full-viewport gradient. */
+.stage::before,
+.stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.stage::before {
+  background: radial-gradient(
+    60% 45% at 50% 42%,
+    rgba(120, 145, 175, 0.13),
+    transparent 70%
+  );
+}
+
+.stage::after {
+  background: radial-gradient(
+    40% 30% at 50% 60%,
+    rgba(182, 243, 107, 0.07),
+    transparent 72%
+  );
+  opacity: var(--p, 0);
+}
+
+.field {
+  position: relative;
+  width: var(--frame-w);
+  height: var(--frame-h);
+  transform-style: preserve-3d;
+  transform: translateX(
+      calc(var(--shift, 0) * var(--shift-scale, 1) * 1vw)
+    )
+    rotateX(calc(var(--my, 0) * -3.5deg)) rotateY(calc(var(--mx, 0) * 5deg));
+  transition: transform 750ms var(--ease-out);
+  --inv: calc(1 - var(--p, 0));
+  --frame-w: min(76vw, 660px);
+  --frame-h: calc(var(--frame-w) * 0.62);
+}
+
+/* ---- Planes ----------------------------------------------------------- */
+
+.planes {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+.plane {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  background: linear-gradient(
+    150deg,
+    rgba(22, 28, 36, 0.82),
+    rgba(10, 13, 18, 0.72)
+  );
+  opacity: min(1, calc(0.34 + 0.32 * var(--p, 0) + 0.3 * var(--emph, 0)));
+  transform: translate3d(
+      calc(var(--sx) * var(--inv) * var(--scene-depth) * 1px),
+      calc(
+        (var(--sy) * var(--inv) * var(--scene-depth) + var(--slot-y) * var(--p, 0)) *
+          1px
+      ),
+      calc(
+        (var(--sz) * var(--inv) * var(--scene-depth) + var(--slot-z) * var(--p, 0)) *
+          1px
+      )
+    )
+    rotateX(calc(var(--srx) * var(--inv) * 1deg))
+    rotateY(calc(var(--sry) * var(--inv) * 1deg));
+}
+
+/* Unbuilt: dashed hairline, no fill weight. */
+.plane::before,
+.plane::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.plane::before {
+  border: 1px dashed var(--edge-strong);
+  opacity: var(--inv);
+}
+
+/* Built: solid edge, and only emphasised planes pick up any signal tint.
+   The colour is static; emphasis rides on opacity alone. */
+.plane::after {
+  border: 1px solid rgba(182, 243, 107, 0.45);
+  box-shadow: inset 0 1px 0 rgba(233, 237, 242, 0.06);
+  opacity: calc(var(--emph, 0) * var(--p, 0));
+}
+
+.planeEdge {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--edge);
+  opacity: var(--p, 0);
+}
+
+.planeLabel {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.85rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--steel-bright);
+  /* Absorbed into the build once assembly is under way. */
+  opacity: clamp(0, calc((0.62 - var(--p, 0)) * 3.2), 1);
+}
+
+.planeNote {
+  color: var(--steel);
+  letter-spacing: 0.08em;
+  text-transform: none;
+}
+
+/* ---- Browser frame ----------------------------------------------------- */
+
+.frame {
+  position: absolute;
+  inset: -6% -4%;
+  transform: translateZ(60px);
+  border: 1px solid var(--edge-strong);
+  /* No backdrop-filter: blurring behind a preserve-3d stack of seven
+     transformed planes is pathologically expensive. */
+  background: rgba(5, 7, 10, 0.72);
+  opacity: clamp(0, calc((var(--p, 0) - 0.38) * 3.4), 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.frameBar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid var(--edge);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: var(--steel);
+}
+
+.frameDots {
+  display: flex;
+  gap: 0.3rem;
+  flex: none;
+}
+
+.frameDots span {
+  width: 6px;
+  height: 6px;
+  border: 1px solid var(--edge-strong);
+  border-radius: 50%;
+}
+
+.frameUrl {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--edge);
+  color: var(--steel-bright);
+}
+
+.status {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid currentColor;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--steel);
+}
+
+/* Signal appears for exactly one reason: the build is live. */
+.statusLive {
+  color: var(--signal);
+  background: var(--signal-dim);
+}
+
+.statusDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* ---- The page being assembled inside the frame ------------------------- */
+
+.page {
+  position: relative;
+  flex: 1;
+  margin: 0.85rem;
+  opacity: clamp(0, calc((var(--p, 0) - 0.62) * 3.2), 1);
+}
+
+/* Blocks animate position and size between capabilities, so switching a
+   service reads as the same page being re-laid-out rather than swapped. */
+.block {
+  position: absolute;
+  display: block;
+  transition:
+    left var(--dur) var(--ease-out),
+    top var(--dur) var(--ease-out),
+    width var(--dur) var(--ease-out),
+    height var(--dur) var(--ease-out),
+    background-color var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out);
+}
+
+.line {
+  border: 1px solid var(--edge);
+  background: rgba(233, 237, 242, 0.02);
+}
+
+.fill {
+  border: 1px solid transparent;
+  background: rgba(233, 237, 242, 0.09);
+}
+
+.solid {
+  border: 1px solid transparent;
+  background: rgba(233, 237, 242, 0.26);
+}
+
+/* ---- Layer legend ------------------------------------------------------ */
+
+.legend {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(-6.5rem, -9vh, -4.5rem);
+  transform: translateX(-50%) translateZ(80px);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem;
+  width: max(var(--frame-w), 320px);
+  opacity: clamp(0, calc((var(--p, 0) - 0.3) * 3), 1);
+}
+
+.chip {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.22rem 0.5rem;
+  border: 1px solid var(--edge);
+  color: var(--steel);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+
+.chipOn {
+  color: var(--paper);
+  border-color: var(--edge-strong);
+  background: rgba(233, 237, 242, 0.05);
+}
+
+@media (max-width: 900px) {
+  .field {
+    --frame-w: min(86vw, 460px);
+    /* The list stacks above the scene on narrow screens, so there is no
+       column to make room for. */
+    --shift-scale: 0;
+  }
+
+  .planeLabel {
+    font-size: 0.56rem;
+  }
+
+  .legend {
+    bottom: -5.5rem;
+    gap: 0.25rem;
+  }
+
+  .chip {
+    font-size: 0.52rem;
+    padding: 0.18rem 0.38rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .stage {
+    perspective-origin: 50% 40%;
+  }
+
+  .field {
+    --frame-w: 88vw;
+  }
+
+  /* Depth is expensive and hard to read on a phone: the stack keeps its
+     narrative but flattens, and the legend drops to the essentials. */
+  .frame {
+    inset: -4% -2%;
+  }
+
+  .legend {
+    display: none;
+  }
+}

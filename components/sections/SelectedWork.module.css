@@ -1,0 +1,294 @@
+.section {
+  position: relative;
+  z-index: 3;
+  background: var(--void);
+  padding-block: var(--section-y);
+  border-top: 1px solid var(--edge);
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  margin-bottom: clamp(2.5rem, 6vh, 4rem);
+}
+
+.title {
+  font-size: var(--step-3);
+  font-weight: 620;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  max-width: 22ch;
+  text-wrap: balance;
+}
+
+/* Same shape as the capability section: the index on the left, the delivered
+   site framed on the right — and the frame keeps the hero's depth. */
+.layout {
+  position: relative;
+  perspective: 1600px;
+  perspective-origin: 62% 45%;
+}
+
+.list {
+  width: 42%;
+}
+
+.item {
+  border-top: 1px solid var(--edge);
+}
+
+.item:last-child {
+  border-bottom: 1px solid var(--edge);
+}
+
+.trigger {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 0.35rem 0.75rem;
+  width: 100%;
+  padding: 1rem 0;
+  text-align: left;
+  color: var(--steel);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.index {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.16em;
+}
+
+.name {
+  font-size: var(--step-1);
+  font-weight: 560;
+  letter-spacing: -0.025em;
+  color: var(--steel-bright);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.category {
+  grid-column: 2;
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.arrow {
+  grid-row: 1;
+  grid-column: 3;
+  font-size: 0.85em;
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+
+.itemOn .name {
+  color: var(--paper);
+}
+
+.itemOn .trigger {
+  color: var(--steel-bright);
+}
+
+.itemOn .arrow {
+  opacity: 1;
+}
+
+/* ---- The framed project -----------------------------------------------
+   Positioned against .layout so one set of images serves the desktop frame.
+   Inactive windows sit further back and above; the active one settles into
+   place, echoing the hero's assembly. */
+
+.preview {
+  --enter: 1;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  /* Centred against the list without touching the transform, which the tilt
+     and the entrance animation already own. */
+  height: fit-content;
+  margin-block: auto;
+  width: 54%;
+  transform-style: preserve-3d;
+  opacity: 0;
+  pointer-events: none;
+  transform: rotateX(calc(var(--my, 0) * -2.4deg))
+    rotateY(calc(var(--mx, 0) * 3.2deg))
+    translate3d(0, calc(var(--enter) * -14px), calc(var(--enter) * -70px));
+  transition:
+    opacity var(--dur) var(--ease-out),
+    transform var(--dur-slow) var(--ease-out);
+}
+
+/* Two classes, so the active state cannot be lost to source order against the
+   equally-specific .preview base rule. */
+.preview.previewOn {
+  --enter: 0;
+  opacity: 1;
+}
+
+/* Two hairline plates behind the window: the layers this page was built from,
+   still visible under the finished result. */
+.plate {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--edge);
+  background: rgba(10, 13, 18, 0.6);
+  opacity: 0;
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    transform var(--dur-slow) var(--ease-out);
+  transform: translate3d(0, 0, -1px);
+}
+
+.preview.previewOn .plate:first-of-type {
+  opacity: 0.7;
+  transform: translate3d(-14px, 14px, -26px);
+}
+
+.preview.previewOn .plate:nth-of-type(2) {
+  opacity: 0.45;
+  transform: translate3d(-26px, 26px, -50px);
+}
+
+.window {
+  position: relative;
+  border: 1px solid var(--edge-strong);
+  background: var(--graphite);
+  box-shadow: 0 30px 70px -30px rgba(0, 0, 0, 0.85);
+  overflow: hidden;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid var(--edge);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.08em;
+  color: var(--steel);
+}
+
+.dots {
+  display: flex;
+  gap: 0.3rem;
+  flex: none;
+}
+
+.dots span {
+  width: 6px;
+  height: 6px;
+  border: 1px solid var(--edge-strong);
+  border-radius: 50%;
+}
+
+.url {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--steel-bright);
+}
+
+.live {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid currentColor;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--signal);
+  background: var(--signal-dim);
+}
+
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.screen {
+  position: relative;
+  overflow: hidden;
+  /* Crops the tall home pages to a cinematic band instead of letting one
+     project dictate the height of the frame. */
+  aspect-ratio: 16 / 9;
+}
+
+.cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  filter: saturate(0.82) brightness(0.94);
+  transition:
+    filter var(--dur-slow) var(--ease-out),
+    transform 1.4s var(--ease-out);
+}
+
+.preview.previewOn .cover {
+  filter: none;
+}
+
+@media (max-width: 900px) {
+  /* Mobile gets its own shape: no hover, so each project carries its own
+     window inline and nothing depends on pointing precision. */
+  .layout {
+    perspective: none;
+  }
+
+  .list {
+    width: 100%;
+  }
+
+  .item {
+    padding-bottom: 1.5rem;
+  }
+
+  .trigger {
+    min-height: 48px;
+    padding: 1.1rem 0 0.85rem;
+  }
+
+  .name {
+    color: var(--paper);
+  }
+
+  .arrow {
+    opacity: 1;
+  }
+
+  .preview,
+  .preview.previewOn {
+    position: static;
+    width: 100%;
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+  }
+
+  .plate {
+    display: none;
+  }
+
+  .window {
+    box-shadow: none;
+  }
+
+  .screen {
+    aspect-ratio: 16 / 10;
+  }
+
+  .cover {
+    filter: none;
+  }
+}

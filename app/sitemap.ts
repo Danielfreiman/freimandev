@@ -1,11 +1,10 @@
 import type { MetadataRoute } from "next";
+import { SITE_URL } from "@/data/brand";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://freiman.dev";
-
   return [
     {
-      url: siteUrl,
+      url: SITE_URL,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 1,

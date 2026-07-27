@@ -1,0 +1,146 @@
+.section {
+  position: relative;
+  z-index: 3;
+  background: var(--surface);
+  border-top: 1px solid var(--edge);
+  padding-block: var(--section-y);
+}
+
+.inner {
+  display: flex;
+  justify-content: center;
+}
+
+.frame {
+  width: min(100%, 62rem);
+  border: 1px solid var(--edge-strong);
+  background:
+    radial-gradient(
+      70% 90% at 50% 0%,
+      rgba(182, 243, 107, 0.05),
+      transparent 70%
+    ),
+    var(--graphite);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.85rem;
+  border-bottom: 1px solid var(--edge);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.1em;
+  color: var(--steel);
+}
+
+.dots {
+  display: flex;
+  gap: 0.3rem;
+  flex: none;
+}
+
+.dots span {
+  width: 6px;
+  height: 6px;
+  border: 1px solid var(--edge-strong);
+  border-radius: 50%;
+}
+
+.url {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--edge);
+  color: var(--steel-bright);
+}
+
+/* The one place outside the scene where the signal is earned. */
+.status {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid currentColor;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--signal);
+  background: var(--signal-dim);
+}
+
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+  padding: clamp(2rem, 6vw, 4.5rem);
+}
+
+.title {
+  font-size: var(--step-3);
+  font-weight: 620;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  max-width: 18ch;
+  text-wrap: balance;
+}
+
+.text {
+  max-width: var(--measure);
+  color: var(--steel-bright);
+  font-size: var(--step-1);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.cta {
+  margin-top: 0.5rem;
+}
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5rem;
+  margin: 1.5rem 0 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--edge);
+  width: 100%;
+}
+
+.facts dt {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--steel);
+  margin-bottom: 0.3rem;
+}
+
+.facts dd {
+  margin: 0;
+  color: var(--paper);
+}
+
+@media (max-width: 560px) {
+  .cta {
+    width: 100%;
+    justify-content: center;
+    min-height: 48px;
+  }
+
+  .facts {
+    gap: 1.5rem;
+  }
+}
